@@ -3,6 +3,7 @@ package ru.otus.dsokolov.domain;
 public class Answer {
     private int id;
     private String subj;
+    private boolean isCorrect;
 
     public int getId() {
         return id;
