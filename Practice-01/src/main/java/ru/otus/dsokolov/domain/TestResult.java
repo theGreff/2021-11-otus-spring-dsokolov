@@ -1,13 +1,14 @@
 package ru.otus.dsokolov.domain;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class TestResult {
     private Person person;
     private List<Question> questions;
-    private Map<Long, Long> personAnswers;
-    private Map<Long, String> personResults;
+    private Map<Long, String> personAnswers = new HashMap<>();
+    private Map<Long, Boolean> personResults = new HashMap<>();
 
     public Person getPerson() {
         return person;
@@ -25,19 +26,19 @@ public class TestResult {
         this.questions = questions;
     }
 
-    public Map<Long, Long> getPersonAnswers() {
+    public Map<Long, String> getPersonAnswers() {
         return personAnswers;
     }
 
-    public void setPersonAnswers(Map<Long, Long> personAnswers) {
+    public void setPersonAnswers(Map<Long, String> personAnswers) {
         this.personAnswers = personAnswers;
     }
 
-    public Map<Long, String> getPersonResults() {
+    public Map<Long, Boolean> getPersonResults() {
         return personResults;
     }
 
-    public void setPersonResults(Map<Long, String> personResults) {
+    public void setPersonResults(Map<Long, Boolean> personResults) {
         this.personResults = personResults;
     }
 }
