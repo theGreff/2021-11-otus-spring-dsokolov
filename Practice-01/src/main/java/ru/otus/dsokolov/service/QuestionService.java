@@ -1,5 +1,11 @@
 package ru.otus.dsokolov.service;
 
+import ru.otus.dsokolov.domain.Question;
+
+import java.util.List;
+
 public interface QuestionService {
-    public void printAllQuestions();
+    List<Question> loadAndGetQuestions();
+
+    void printQuestions();
 }

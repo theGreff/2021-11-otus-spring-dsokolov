@@ -9,9 +9,10 @@ public class Answer {
         return id;
     }
 
-    public Answer(int id, String subj) {
+    public Answer(int id, String subj, boolean isCorrect) {
         this.id = id;
         this.subj = subj;
+        this.isCorrect = isCorrect;
     }
 
     public void setId(int id) {
@@ -24,5 +25,13 @@ public class Answer {
 
     public void setSubj(String subj) {
         this.subj = subj;
+    }
+
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public void setCorrect(boolean correct) {
+        isCorrect = correct;
     }
 }
