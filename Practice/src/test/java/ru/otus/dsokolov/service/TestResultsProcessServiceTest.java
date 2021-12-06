@@ -2,9 +2,11 @@ package ru.otus.dsokolov.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import ru.otus.dsokolov.Main;
+import ru.otus.dsokolov.config.QuestionConfig;
+import ru.otus.dsokolov.dao.QuestionCSV;
+import ru.otus.dsokolov.dao.QuestionDAO;
 import ru.otus.dsokolov.domain.Person;
 import ru.otus.dsokolov.domain.TestResult;
 
@@ -16,31 +18,35 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @DisplayName("Test of process test results")
 public class TestResultsProcessServiceTest {
+
+    @Autowired
+    QuestionConfig questionConfig;
+
     @Test
     void processTestResult() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
-
         TestResult testResult = new TestResult();
         testResult.setPerson(new Person("firstName", "lastName"));
-        QuestionService questionService = context.getBean(QuestionServiceImpl.class);
+
+        QuestionDAO questionDAO = new QuestionCSV(questionConfig);
+        QuestionServiceImpl questionService = new QuestionServiceImpl(questionDAO);
+
         testResult.setQuestions(questionService.loadAndGetQuestions());
 
-        TestResultsProcessService testResultsProcessService = context.getBean(TestResultsProcessService.class);
+        TestResultsProcessService testResultsProcessService = new TestResultsProcessService(questionDAO, questionConfig);
         Map<Long, String> personAnswers = new HashMap<>();
-        //1+2; 3; 4; ; 1
+        //1+1; 1; 2; 3; 2
 
         // set wrong answer
-        personAnswers.put(1L, "4");
+        personAnswers.put(1L, "3");
         testResult.setPersonAnswers(personAnswers);
         testResultsProcessService.processPersonAnswers(testResult);
         assertEquals(testResult.getPersonResults().get(1L), Boolean.FALSE);
 
         // set correct answer
         personAnswers.clear();
-        personAnswers.put(1L, "3");
+        personAnswers.put(1L, "2");
         testResult.setPersonAnswers(personAnswers);
         testResultsProcessService.processPersonAnswers(testResult);
-
         assertEquals(testResult.getPersonResults().get(1L), Boolean.TRUE);
     }
 }

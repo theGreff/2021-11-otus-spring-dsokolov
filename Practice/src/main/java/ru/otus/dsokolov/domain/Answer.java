@@ -1,18 +1,19 @@
 package ru.otus.dsokolov.domain;
 
 public class Answer {
+
     private int id;
     private String subj;
     private boolean isCorrect;
-
-    public int getId() {
-        return id;
-    }
 
     public Answer(int id, String subj, boolean isCorrect) {
         this.id = id;
         this.subj = subj;
         this.isCorrect = isCorrect;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setId(int id) {

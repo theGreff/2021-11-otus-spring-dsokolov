@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class TestResultsProcessService {
-    private final QuestionDAO questionDAO;
 
+    private final QuestionDAO questionDAO;
     private final int correctAnswersToPassTest;
 
     public TestResultsProcessService(final QuestionDAO questionDAO, final QuestionConfig questionConfig) {
@@ -36,9 +36,12 @@ public class TestResultsProcessService {
     }
 
     public void processPersonAnswers(TestResult testResult) {
+        if (testResult.getQuestions().isEmpty()) {
+            throw new RuntimeException("Questions are not loaded");
+        }
+
         testResult.getQuestions().forEach(o -> {
             String gotAnswer = testResult.getPersonAnswers().get((long) o.getId());
-
             testResult.getPersonResults().put((long) o.getId(), processAnswer(o, gotAnswer));
         });
 
