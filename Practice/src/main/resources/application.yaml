@@ -1,0 +1,3 @@
+question:
+  recoursePath: /data/questions.csv
+  correctAnswersToPassTest: 4

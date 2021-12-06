@@ -1,10 +1,9 @@
 package ru.otus.dsokolov.dao;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+import ru.otus.dsokolov.config.QuestionConfig;
 import ru.otus.dsokolov.domain.Answer;
 import ru.otus.dsokolov.domain.Question;
 
@@ -16,12 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@PropertySource("classpath:application.properties")
 public class QuestionCSV implements QuestionDAO {
-    @Value("${question.res}")
-    private String resPath;
 
-    private List<Question> questionList = new ArrayList<>();
+    private final String recoursePath;
+    private final List<Question> questionList = new ArrayList<>();
+
+    public QuestionCSV(final QuestionConfig questionConfig) {
+        this.recoursePath = questionConfig.getRecoursePath();
+    }
 
     private List<Answer> getAnswers(String[] line) {
         List<Answer> res = new ArrayList<>();
@@ -37,7 +38,7 @@ public class QuestionCSV implements QuestionDAO {
 
     @Override
     public void load() {
-        Resource resource = new ClassPathResource(resPath);
+        Resource resource = new ClassPathResource(recoursePath);
         String lineStr;
         int questionId = 1;
         //  0 - сам вопрос. 1-3 варинаты ответов, 4 - правильный номер(!) ответа

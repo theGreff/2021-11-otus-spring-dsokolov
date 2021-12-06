@@ -1,8 +1,7 @@
 package ru.otus.dsokolov.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import ru.otus.dsokolov.config.QuestionConfig;
 import ru.otus.dsokolov.dao.QuestionDAO;
 import ru.otus.dsokolov.domain.Answer;
 import ru.otus.dsokolov.domain.Question;
@@ -13,15 +12,14 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Component
-@PropertySource("classpath:application.properties")
 public class TestResultsProcessService {
     private final QuestionDAO questionDAO;
 
-    @Value("${cnt.test.done}")
-    private Long cntAnswerForDone;
+    private final int correctAnswersToPassTest;
 
-    public TestResultsProcessService(final QuestionDAO questionDAO) {
+    public TestResultsProcessService(final QuestionDAO questionDAO, final QuestionConfig questionConfig) {
         this.questionDAO = questionDAO;
+        this.correctAnswersToPassTest = questionConfig.getCorrectAnswersToPassTest();
     }
 
     public void loadPersonAnswers(TestResult testResult) {
@@ -59,7 +57,7 @@ public class TestResultsProcessService {
         List<Boolean> correctAnswerCnt = testResult.getPersonResults().values()
                 .stream().filter(Boolean.TRUE::equals).collect(Collectors.toList());
 
-        if (correctAnswerCnt.size() >= cntAnswerForDone) {
+        if (correctAnswerCnt.size() >= correctAnswersToPassTest) {
             System.out.println("The Test is passed!");
 
             return true;
