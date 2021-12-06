@@ -2,8 +2,12 @@ package ru.otus.dsokolov.dao;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import ru.otus.dsokolov.Main;
+import ru.otus.dsokolov.config.QuestionConfig;
 import ru.otus.dsokolov.domain.Answer;
 import ru.otus.dsokolov.domain.Question;
 
@@ -12,6 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 @DisplayName("Loading data into Question bean")
 class QuestionCSVTest {
 
@@ -26,7 +31,7 @@ class QuestionCSVTest {
         List<Question> questionExpectedList = new ArrayList<>();
         List<Answer> answerExpectedList = new ArrayList<>();
         answerExpectedList.add(new Answer(1, "3", true));
-        answerExpectedList.add(new Answer(2, "4",false));
+        answerExpectedList.add(new Answer(2, "4", false));
         questionExpectedList.add(new Question(1, "1+2", answerExpectedList));
 
         assertEquals(questionExpectedList.get(0).getSubj(), questionActualList.get(0).getSubj());

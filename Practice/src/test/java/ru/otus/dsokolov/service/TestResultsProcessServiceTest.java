@@ -2,6 +2,7 @@ package ru.otus.dsokolov.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.otus.dsokolov.Main;
 import ru.otus.dsokolov.domain.Person;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@SpringBootTest
 @DisplayName("Test of process test results")
 public class TestResultsProcessServiceTest {
     @Test
