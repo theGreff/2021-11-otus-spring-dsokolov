@@ -3,16 +3,12 @@ package ru.otus.dsokolov;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
 import ru.otus.dsokolov.domain.Person;
 import ru.otus.dsokolov.domain.TestResult;
 import ru.otus.dsokolov.service.QuestionService;
 import ru.otus.dsokolov.service.QuestionServiceImpl;
 import ru.otus.dsokolov.service.TestResultsProcessService;
 
-import java.util.Locale;
 import java.util.Scanner;
 
 @SpringBootApplication
