@@ -3,10 +3,9 @@ package ru.otus.dsokolov.domain;
 import java.util.List;
 
 public class Question {
+
     private int id;
-
     private String subj;
-
     private List<Answer> answer;
 
     public Question(int id, String subj, List<Answer> answer) {

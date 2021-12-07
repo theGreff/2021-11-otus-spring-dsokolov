@@ -11,8 +11,8 @@ import java.util.List;
 
 @Component
 public class QuestionServiceImpl implements QuestionService {
-    private final QuestionDAO dao;
 
+    private final QuestionDAO dao;
     private List<Question> questionList;
 
     public QuestionServiceImpl(final QuestionDAO dao) {

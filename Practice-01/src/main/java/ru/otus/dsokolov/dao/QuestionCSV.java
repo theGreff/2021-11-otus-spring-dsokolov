@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@PropertySource("classpath:app.properties")
+@PropertySource("classpath:application.properties")
 public class QuestionCSV implements QuestionDAO {
+
     @Value("${question.res}")
     private String resPath;
 

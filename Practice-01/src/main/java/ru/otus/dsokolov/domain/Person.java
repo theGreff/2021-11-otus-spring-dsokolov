@@ -1,8 +1,14 @@
 package ru.otus.dsokolov.domain;
 
 public class Person {
+
     private String firstName;
     private String lastName;
+
+    public Person(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -17,11 +23,6 @@ public class Person {
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Person(String firstName, String lastName) {
-        this.firstName = firstName;
         this.lastName = lastName;
     }
 

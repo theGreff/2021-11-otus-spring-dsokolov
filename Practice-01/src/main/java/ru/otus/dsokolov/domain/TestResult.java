@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TestResult {
+
     private Person person;
     private List<Question> questions;
     private Map<Long, String> personAnswers = new HashMap<>();

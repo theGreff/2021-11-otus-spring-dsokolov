@@ -13,8 +13,9 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Component
-@PropertySource("classpath:app.properties")
+@PropertySource("classpath:application.properties")
 public class TestResultsProcessService {
+
     private final QuestionDAO questionDAO;
 
     @Value("${cnt.test.done}")
