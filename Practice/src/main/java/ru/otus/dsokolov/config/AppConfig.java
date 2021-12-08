@@ -9,6 +9,7 @@ import java.util.Locale;
 @ConfigurationProperties(prefix = "application")
 public class AppConfig {
     Locale locale;
+    String localePath;
 
     public Locale getLocale() {
         return locale;
@@ -16,5 +17,13 @@ public class AppConfig {
 
     public void setLocale(Locale locale) {
         this.locale = locale;
+    }
+
+    public String getLocalePath() {
+        return localePath;
+    }
+
+    public void setLocalePath(String localePath) {
+        this.localePath = localePath;
     }
 }

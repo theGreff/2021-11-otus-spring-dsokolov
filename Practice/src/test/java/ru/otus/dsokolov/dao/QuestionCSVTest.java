@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.otus.dsokolov.config.LocalizationConfig;
 import ru.otus.dsokolov.config.QuestionConfig;
 import ru.otus.dsokolov.domain.Answer;
 import ru.otus.dsokolov.domain.Question;
@@ -16,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @DisplayName("Loading data into Question bean")
 class QuestionCSVTest {
-
     @Autowired
     QuestionConfig questionConfig;
 

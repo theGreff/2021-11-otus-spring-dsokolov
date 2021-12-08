@@ -3,4 +3,5 @@ question:
   correctAnswersToPassTest: 4
 
 application:
+  localePath: /i18n/bundle
   locale: bundle_ru_RU
