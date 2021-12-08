@@ -4,6 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.MessageSource;
+import ru.otus.dsokolov.config.AppConfig;
+import ru.otus.dsokolov.config.LocalizationConfig;
 import ru.otus.dsokolov.config.QuestionConfig;
 import ru.otus.dsokolov.dao.QuestionCSV;
 import ru.otus.dsokolov.dao.QuestionDAO;
@@ -21,6 +24,10 @@ public class TestResultsProcessServiceTest {
 
     @Autowired
     QuestionConfig questionConfig;
+    @Autowired
+    AppConfig appConfig;
+    @Autowired
+    LocalizationConfig localizationConfig;
 
     @Test
     void processTestResult() {
@@ -32,7 +39,8 @@ public class TestResultsProcessServiceTest {
 
         testResult.setQuestions(questionService.loadAndGetQuestions());
 
-        TestResultsProcessService testResultsProcessService = new TestResultsProcessService(questionDAO, questionConfig);
+        TestResultsProcessService testResultsProcessService = new TestResultsProcessService(questionDAO,
+                questionConfig, appConfig, localizationConfig);
         Map<Long, String> personAnswers = new HashMap<>();
         //1+1; 1; 2; 3; 2
 

@@ -1,3 +1,6 @@
 question:
   recoursePath: /data/questions.csv
   correctAnswersToPassTest: 4
+
+application:
+  locale: bundle_ru_RU

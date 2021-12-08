@@ -1,6 +1,8 @@
 package ru.otus.dsokolov.service;
 
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+import ru.otus.dsokolov.config.AppConfig;
 import ru.otus.dsokolov.dao.QuestionDAO;
 import ru.otus.dsokolov.domain.Question;
 
@@ -11,6 +13,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionDAO dao;
     private List<Question> questionList;
+
 
     public QuestionServiceImpl(final QuestionDAO dao) {
         this.dao = dao;

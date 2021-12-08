@@ -3,6 +3,9 @@ package ru.otus.dsokolov;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
+import ru.otus.dsokolov.config.AppConfig;
+import ru.otus.dsokolov.config.LocalizationConfig;
 import ru.otus.dsokolov.domain.Person;
 import ru.otus.dsokolov.domain.TestResult;
 import ru.otus.dsokolov.service.QuestionService;
@@ -18,9 +21,13 @@ public class Main {
         ApplicationContext context = SpringApplication.run(Main.class, args);
 
         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.println("Enter your fist name: ");
+            AppConfig appConfig = context.getBean(AppConfig.class);
+            LocalizationConfig localizationConfig = context.getBean(LocalizationConfig.class);
+            MessageSource messageSource = localizationConfig.messageSource();
+
+            System.out.println(messageSource.getMessage("message.enter-first-name", null, appConfig.getLocale()));
             String firstName = scanner.nextLine();
-            System.out.println("Enter last name: ");
+            System.out.println(messageSource.getMessage("message.enter-last-name", null, appConfig.getLocale()));
             String lastName = scanner.nextLine();
 
             TestResult testResult = new TestResult();
@@ -28,8 +35,8 @@ public class Main {
 
             QuestionService questionService = context.getBean(QuestionServiceImpl.class);
             testResult.setQuestions(questionService.loadAndGetQuestions());
-            System.out.println("Please, answer the questions below:");
 
+            System.out.println(messageSource.getMessage("message.enter-answer-questions", null, appConfig.getLocale()));
             TestResultsProcessService testResultsProcessService = context.getBean(TestResultsProcessService.class);
             testResultsProcessService.loadPersonAnswers(testResult);
             testResultsProcessService.processPersonAnswers(testResult);
