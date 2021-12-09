@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @PropertySource("classpath:application.properties")
@@ -22,9 +23,20 @@ public class QuestionCSV implements QuestionDAO {
     @Value("${question.res}")
     private String resPath;
 
-    private List<Question> questionList = new ArrayList<>();
+    private final List<Question> questionList = new ArrayList<>();
 
-    private List<Answer> getAnswers(String[] line) {
+    @Override
+    public List<Question> getAll() {
+        try {
+            load(readResource());
+        } catch (IOException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return questionList;
+    }
+
+    private List<Answer> parseAnswers(String[] line) {
         List<Answer> res = new ArrayList<>();
 
         // последним всегда идет номер правильного ответа
@@ -36,36 +48,30 @@ public class QuestionCSV implements QuestionDAO {
         return res;
     }
 
-    @Override
-    public void load() {
+    private void load(List<String> data) {
+        questionList.clear();
+
+        AtomicInteger questionId = new AtomicInteger(1);
+        data.forEach(o -> {
+            //  0 - сам вопрос. 1-3 варианты ответов, 4 - правильный номер(!) ответа
+            String[] items = o.split(";");
+            questionList.add(new Question(questionId.getAndIncrement(), items[0].trim(), parseAnswers(items)));
+        });
+    }
+
+    private List<String> readResource() throws IOException {
+        List<String> result = new ArrayList<>();
+
         Resource resource = new ClassPathResource(resPath);
         String lineStr;
-        int questionId = 1;
-        //  0 - сам вопрос. 1-3 варинаты ответов, 4 - правильный номер(!) ответа
-        try (InputStream inputStream = resource.getInputStream()) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        //  0 - сам вопрос. 1-3 варианты ответов, 4 - правильный номер(!) ответа
+        try (InputStream inputStream = resource.getInputStream();
+             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
             while ((lineStr = bufferedReader.readLine()) != null) {
-                String[] items = lineStr.split(";");
-                questionList.add(new Question(questionId++, items[0].trim(), getAnswers(items)));
+                result.add(lineStr);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public List<Question> getAll() {
-        return questionList;
-    }
-
-    @Override
-    public Answer getCorrectAnswerByQuestionId(Long questionId) {
-        Question question = questionList.stream().filter(o -> questionId.equals((long) o.getId())).findFirst().orElse(null);
-
-        if (question == null) {
-            throw new RuntimeException("Can not find the Question with id + questionId");
         }
 
-        return question.getAnswer().stream().filter(Answer::isCorrect).findFirst().orElse(null);
+        return result;
     }
 }

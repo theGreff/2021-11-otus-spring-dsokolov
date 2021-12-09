@@ -1,22 +1,19 @@
 package ru.otus.dsokolov.service;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 import ru.otus.dsokolov.dao.QuestionDAO;
 import ru.otus.dsokolov.domain.Question;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class QuestionServiceImpl implements QuestionService {
 
-    private final QuestionDAO dao;
-    private List<Question> questionList;
+    private final List<Question> questionList = new ArrayList<>();
 
     public QuestionServiceImpl(final QuestionDAO dao) {
-        this.dao = dao;
+        questionList.addAll(dao.getAll());
     }
 
     @Override
@@ -26,6 +23,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         System.out.println("Please, answer the questions below:");
+
         questionList.forEach(o -> {
             StringBuilder stringB = new StringBuilder();
             o.getAnswer().forEach(o1 -> stringB.append(o1.getSubj().trim()).append(" / "));
@@ -34,9 +32,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> loadAndGetQuestions() {
-        dao.load();
+    public List<Question> prepareForTest() {
+        System.out.println("Please, answer the questions below:");
 
-        return questionList = dao.getAll();
+        return questionList;
     }
 }

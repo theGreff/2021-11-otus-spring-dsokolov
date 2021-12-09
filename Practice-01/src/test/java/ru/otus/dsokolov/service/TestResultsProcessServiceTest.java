@@ -21,7 +21,7 @@ public class TestResultsProcessServiceTest {
         TestResult testResult = new TestResult();
         testResult.setPerson(new Person("firstName", "lastName"));
         QuestionService questionService = context.getBean(QuestionServiceImpl.class);
-        testResult.setQuestions(questionService.loadAndGetQuestions());
+        testResult.setQuestions(questionService.prepareForTest());
 
         TestResultsProcessService testResultsProcessService = context.getBean(TestResultsProcessService.class);
         Map<Long, String> personAnswers = new HashMap<>();

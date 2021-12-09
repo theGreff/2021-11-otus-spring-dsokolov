@@ -16,17 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class QuestionCSVTest {
 
     @Test
-    void load() {
+    void loadQuestions() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         QuestionDAO questionDAO = context.getBean(QuestionDAO.class);
-        questionDAO.load();
         List<Question> questionActualList = questionDAO.getAll();
 
         // 1+2; 3; 4;
         List<Question> questionExpectedList = new ArrayList<>();
         List<Answer> answerExpectedList = new ArrayList<>();
         answerExpectedList.add(new Answer(1, "3", true));
-        answerExpectedList.add(new Answer(2, "4",false));
+        answerExpectedList.add(new Answer(2, "4", false));
         questionExpectedList.add(new Question(1, "1+2", answerExpectedList));
 
         assertEquals(questionExpectedList.get(0).getSubj(), questionActualList.get(0).getSubj());
