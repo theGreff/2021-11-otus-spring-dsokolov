@@ -111,14 +111,14 @@ public class TestResultsProcessService {
     }
 
     private void checkQuestionsLoaded(TestResult testResult) {
-        if (testResult.getPersonAnswers() == null || testResult.getPersonAnswers().isEmpty()) {
+        if (testResult.getQuestions() == null || testResult.getQuestions().isEmpty()) {
             throw new RuntimeException(messageSource.getMessage("error.no-questions", null,
                     appConfig.getLocale()));
         }
     }
 
     private void checkPersonAnswersLoaded(TestResult testResult) {
-        if (testResult.getQuestions() == null || testResult.getQuestions().isEmpty()) {
+        if (testResult.getPersonAnswers() == null || testResult.getPersonAnswers().isEmpty()) {
             throw new RuntimeException(messageSource.getMessage("error.no-person-answers", null,
                     appConfig.getLocale()));
         }
