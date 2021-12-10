@@ -4,4 +4,4 @@ question:
 
 application:
   localePath: /i18n/bundle
-  locale: bundle_ru_RU
+  locale: ru_RU
