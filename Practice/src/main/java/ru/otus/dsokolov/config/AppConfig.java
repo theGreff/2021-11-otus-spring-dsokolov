@@ -8,6 +8,7 @@ import java.util.Locale;
 @Component
 @ConfigurationProperties(prefix = "application")
 public class AppConfig {
+
     Locale locale;
     String localePath;
 

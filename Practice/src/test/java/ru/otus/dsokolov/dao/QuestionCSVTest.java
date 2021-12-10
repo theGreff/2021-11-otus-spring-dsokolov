@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.otus.dsokolov.config.LocalizationConfig;
 import ru.otus.dsokolov.config.QuestionConfig;
 import ru.otus.dsokolov.domain.Answer;
 import ru.otus.dsokolov.domain.Question;
@@ -23,7 +22,6 @@ class QuestionCSVTest {
     @Test
     void load() {
         QuestionDAO questionDAO = new QuestionCSV(questionConfig);
-        questionDAO.load();
         List<Question> questionActualList = questionDAO.getAll();
 
         // 1+2; 3; 4;

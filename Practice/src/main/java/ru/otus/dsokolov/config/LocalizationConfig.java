@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Configuration
 @Component
 public class LocalizationConfig {
+
     private final AppConfig appConfig;
 
     public LocalizationConfig(AppConfig appConfig) {

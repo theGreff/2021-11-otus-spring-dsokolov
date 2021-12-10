@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.MessageSource;
 import ru.otus.dsokolov.config.AppConfig;
 import ru.otus.dsokolov.config.LocalizationConfig;
 import ru.otus.dsokolov.config.QuestionConfig;
@@ -35,12 +34,12 @@ public class TestResultsProcessServiceTest {
         testResult.setPerson(new Person("firstName", "lastName"));
 
         QuestionDAO questionDAO = new QuestionCSV(questionConfig);
-        QuestionServiceImpl questionService = new QuestionServiceImpl(questionDAO);
+        QuestionServiceImpl questionService = new QuestionServiceImpl(appConfig, localizationConfig, questionDAO);
+        AnswerServiceImpl answerService = new AnswerServiceImpl(questionDAO);
+        testResult.setQuestions(questionService.prepareForTest());
 
-        testResult.setQuestions(questionService.loadAndGetQuestions());
-
-        TestResultsProcessService testResultsProcessService = new TestResultsProcessService(questionDAO,
-                questionConfig, appConfig, localizationConfig);
+        TestResultsProcessService testResultsProcessService = new TestResultsProcessService(
+                appConfig, questionConfig, localizationConfig, answerService, questionService);
         Map<Long, String> personAnswers = new HashMap<>();
         //1+1; 1; 2; 3; 2
 
