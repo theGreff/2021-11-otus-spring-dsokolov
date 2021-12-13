@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import ru.otus.dsokolov.base.ParseServiceCSV;
 import ru.otus.dsokolov.config.QuestionConfig;
 import ru.otus.dsokolov.domain.Answer;
 import ru.otus.dsokolov.domain.Question;
@@ -16,12 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @DisplayName("Loading data into Question bean")
 class QuestionCSVTest {
+
     @Autowired
     QuestionConfig questionConfig;
+    @Autowired
+    ParseServiceCSV parseServiceCSV;
 
     @Test
     void load() {
-        QuestionDAO questionDAO = new QuestionCSV(questionConfig);
+        QuestionDAO questionDAO = new QuestionCSV(questionConfig, parseServiceCSV);
         List<Question> questionActualList = questionDAO.getAll();
 
         // 1+2; 3; 4;

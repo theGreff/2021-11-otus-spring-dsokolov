@@ -4,8 +4,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import ru.otus.dsokolov.config.AppConfig;
-import ru.otus.dsokolov.config.LocalizationConfig;
-import ru.otus.dsokolov.config.QuestionConfig;
+import ru.otus.dsokolov.config.AppConfigOut;
 import ru.otus.dsokolov.domain.Answer;
 import ru.otus.dsokolov.domain.Person;
 import ru.otus.dsokolov.domain.Question;
@@ -16,7 +15,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Component
-public class TestResultsProcessService {
+public class TestServiceImpl implements TestService {
 
     private final int correctAnswersToPassTest;
     private final AppConfig appConfig;
@@ -24,17 +23,16 @@ public class TestResultsProcessService {
     private final AnswerService answerService;
     private final QuestionService questionService;
 
-    public TestResultsProcessService(final AppConfig appConfig, final QuestionConfig questionConfig,
-                                     final LocalizationConfig localizationConfig,
-                                     final AnswerService answerService, final QuestionService questionService) {
-        this.appConfig = appConfig;
-        this.correctAnswersToPassTest = questionConfig.getCorrectAnswersToPassTest();
-        this.messageSource = localizationConfig.messageSource();
+    public TestServiceImpl(final AppConfigOut appConfigOut, final AnswerService answerService, final QuestionService questionService) {
+        this.appConfig = appConfigOut.getAppConfig();
+        this.correctAnswersToPassTest = appConfigOut.getQuestionConfig().getCorrectAnswersToPassTest();
+        this.messageSource = appConfigOut.getLocalizationConfig().messageSource();
         this.answerService = answerService;
         this.questionService = questionService;
     }
 
-    public boolean runTest() {
+    @Override
+    public void runTest() {
         try (Scanner scanner = new Scanner(System.in)) {
             TestResult testResult = new TestResult();
 
@@ -42,12 +40,14 @@ public class TestResultsProcessService {
             testResult.setQuestions(questionService.prepareForTest());
             loadPersonAnswers(scanner, testResult);
             processPersonAnswers(testResult);
-
-            return isTestPassed(testResult);
+            isTestPassed(testResult);
         }
     }
 
+    @Override
     public boolean isTestPassed(TestResult testResult) {
+        validatePersonTest(testResult);
+
         List<Boolean> correctAnswerCnt = testResult.getPersonResults().values()
                 .stream().filter(Boolean.TRUE::equals).collect(Collectors.toList());
 
@@ -66,6 +66,7 @@ public class TestResultsProcessService {
         }
     }
 
+    @Override
     public void processPersonAnswers(TestResult testResult) {
         validatePersonTest(testResult);
 

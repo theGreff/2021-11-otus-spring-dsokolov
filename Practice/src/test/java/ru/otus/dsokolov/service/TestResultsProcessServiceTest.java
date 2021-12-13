@@ -4,9 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.otus.dsokolov.config.AppConfig;
-import ru.otus.dsokolov.config.LocalizationConfig;
-import ru.otus.dsokolov.config.QuestionConfig;
+import ru.otus.dsokolov.base.ParseServiceCSV;
+import ru.otus.dsokolov.config.AppConfigOut;
 import ru.otus.dsokolov.dao.QuestionCSV;
 import ru.otus.dsokolov.dao.QuestionDAO;
 import ru.otus.dsokolov.domain.Person;
@@ -22,24 +21,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class TestResultsProcessServiceTest {
 
     @Autowired
-    QuestionConfig questionConfig;
+    AppConfigOut appConfigOut;
+
     @Autowired
-    AppConfig appConfig;
-    @Autowired
-    LocalizationConfig localizationConfig;
+    ParseServiceCSV parseServiceCSV;
 
     @Test
     void processTestResult() {
         TestResult testResult = new TestResult();
         testResult.setPerson(new Person("firstName", "lastName"));
 
-        QuestionDAO questionDAO = new QuestionCSV(questionConfig);
-        QuestionServiceImpl questionService = new QuestionServiceImpl(appConfig, localizationConfig, questionDAO);
+        QuestionDAO questionDAO = new QuestionCSV(appConfigOut.getQuestionConfig(), parseServiceCSV);
+        QuestionServiceImpl questionService = new QuestionServiceImpl(appConfigOut.getAppConfig(),
+                appConfigOut.getLocalizationConfig(), questionDAO);
         AnswerServiceImpl answerService = new AnswerServiceImpl(questionDAO);
         testResult.setQuestions(questionService.prepareForTest());
 
-        TestResultsProcessService testResultsProcessService = new TestResultsProcessService(
-                appConfig, questionConfig, localizationConfig, answerService, questionService);
+        TestServiceImpl testResultsProcessService = new TestServiceImpl(appConfigOut, answerService, questionService);
         Map<Long, String> personAnswers = new HashMap<>();
         //1+1; 1; 2; 3; 2
 
