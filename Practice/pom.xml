@@ -6,13 +6,13 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.6.1</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>ru.otus</groupId>
 	<artifactId>Practice</artifactId>
 	<version>1.0</version>
 	<name>Practice</name>
-	<description>Practice for lesson 3</description>
+	<description>Practice for lesson 5</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

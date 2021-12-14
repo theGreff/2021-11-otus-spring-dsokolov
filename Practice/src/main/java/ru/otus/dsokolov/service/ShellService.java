@@ -5,6 +5,7 @@ import org.springframework.shell.standard.ShellMethod;
 
 @ShellComponent
 public class ShellService {
+
     private final TestServiceImpl testService;
 
     public ShellService(TestServiceImpl testService) {
@@ -15,5 +16,4 @@ public class ShellService {
     public void runTest() {
         testService.runTest();
     }
-
 }
