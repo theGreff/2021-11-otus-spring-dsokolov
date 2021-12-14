@@ -9,9 +9,10 @@ import ru.otus.dsokolov.service.TestServiceImpl;
 public class Main {
 
     public static void main(String[] args) {
-        ApplicationContext ctx = SpringApplication.run(Main.class, args);
-        TestServiceImpl testResultsProcessService = ctx.getBean(TestServiceImpl.class);
+        //ApplicationContext ctx =
+                SpringApplication.run(Main.class, args);
+        //TestServiceImpl testResultsProcessService = ctx.getBean(TestServiceImpl.class);
 
-        testResultsProcessService.runTest();
+        //testResultsProcessService.runTest();
     }
 }

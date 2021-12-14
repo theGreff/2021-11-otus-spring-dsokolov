@@ -5,3 +5,7 @@ question:
 application:
   localePath: /i18n/bundle
   locale: en_EN
+
+spring:
+  main:
+    allow-circular-references: true
