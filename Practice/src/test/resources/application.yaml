@@ -1,7 +1,0 @@
-question:
-  recoursePath: /data/questions.csv
-  correctAnswersToPassTest: 1
-
-application:
-  localePath: /i18n/bundle
-  locale: en_EN
