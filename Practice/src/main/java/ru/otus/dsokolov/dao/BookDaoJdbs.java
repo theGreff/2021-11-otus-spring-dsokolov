@@ -1,6 +1,5 @@
 package ru.otus.dsokolov.dao;
 
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.dsokolov.domain.Book;
@@ -13,19 +12,17 @@ import java.util.Map;
 @Repository
 public class BookDaoJdbs implements BookDao {
 
-    private final JdbcOperations jdbc;
     private final NamedParameterJdbcOperations namedParameterJdbc;
     private final BookMapper bookMapper;
 
-    public BookDaoJdbs(JdbcOperations jdbc, NamedParameterJdbcOperations namedParameterJdbc, BookMapper bookMapper) {
-        this.jdbc = jdbc;
+    public BookDaoJdbs(NamedParameterJdbcOperations namedParameterJdbc, BookMapper bookMapper) {
         this.namedParameterJdbc = namedParameterJdbc;
         this.bookMapper = bookMapper;
     }
 
     @Override
     public int count() {
-        Integer count = jdbc.queryForObject("select count(*) from book", Integer.class);
+        Integer count = namedParameterJdbc.queryForObject("select count(*) from book", Collections.emptyMap(), Integer.class);
         return count == null ? 0 : count;
     }
 
@@ -68,7 +65,7 @@ public class BookDaoJdbs implements BookDao {
         values.put("id", book.getId());
         values.put("title", book.getTitle());
         values.put("idauthor", book.getAuthor() != null ? book.getAuthor().getId() : null);
-        values.put("idgenre", book.getGenre() != null ? book.getId() : null);
+        values.put("idgenre", book.getGenre() != null ? book.getGenre().getId() : null);
 
         return values;
     }

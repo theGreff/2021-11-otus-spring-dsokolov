@@ -5,7 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import ru.otus.dsokolov.dao.BookDao;
-import ru.otus.dsokolov.domain.Book;
+import ru.otus.dsokolov.dao.GenreDao;
+import ru.otus.dsokolov.service.BookService;
 
 import java.sql.SQLException;
 
@@ -14,19 +15,8 @@ public class Main {
 
     public static void main(String[] args) throws SQLException {
         ApplicationContext ctx = SpringApplication.run(Main.class, args);
-
-        BookDao bookDao = ctx.getBean(BookDao.class);
-        Book book = new Book("AAAAAAAAAAAAA");
-        bookDao.insert(book);
-        System.out.println("Count = " + bookDao.count());
-
-        book = bookDao.getByTitle("AAAAAAAAAAAAA");
-        book.setTitle("BBBBBBBBBB");
-        bookDao.update(book);
-
-        book = bookDao.getByTitle("BBBBBBBBBB");
-
-        System.out.println("Count = " + bookDao.count());
+        BookService bookService = ctx.getBean(BookService.class);
+        bookService.createBook("Оно", "Стивен Кинг", "ужасы");
 
         Console.main(args);
     }

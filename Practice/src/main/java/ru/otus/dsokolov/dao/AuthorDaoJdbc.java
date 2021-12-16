@@ -1,6 +1,6 @@
 package ru.otus.dsokolov.dao;
 
-import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
@@ -8,16 +8,17 @@ import ru.otus.dsokolov.domain.Author;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.Collections;
 
 @Repository
 public class AuthorDaoJdbc implements AuthorDao {
 
-    private final JdbcOperations jdbc;
     private final NamedParameterJdbcOperations namedParameterJdbc;
 
-    public AuthorDaoJdbc(JdbcOperations jdbc, NamedParameterJdbcOperations namedParameterJdbc) {
-        this.jdbc = jdbc;
+    private final static String errMsg = "Author was not found by {0} = {1}";
+
+    public AuthorDaoJdbc(NamedParameterJdbcOperations namedParameterJdbc) {
         this.namedParameterJdbc = namedParameterJdbc;
     }
 
@@ -27,8 +28,24 @@ public class AuthorDaoJdbc implements AuthorDao {
             return null;
         }
 
-        return namedParameterJdbc.queryForObject("select id, fullName from author where id = :id",
-                Collections.singletonMap("id", id), new AuthorMapper());
+        try {
+            return namedParameterJdbc.queryForObject("select id, fullName from author where id = :id",
+                    Collections.singletonMap("id", id), new AuthorMapper());
+        } catch (
+                EmptyResultDataAccessException ex) {
+            throw new RuntimeException(MessageFormat.format(errMsg, "id", id));
+        }
+    }
+
+    @Override
+    public Author getByName(String name) {
+        try {
+            return namedParameterJdbc.queryForObject("select id, fullName from author where fullName = :fullName",
+                    Collections.singletonMap("fullName", name), new AuthorMapper());
+        } catch (
+                EmptyResultDataAccessException ex) {
+            throw new RuntimeException(MessageFormat.format(errMsg, "fullName", name));
+        }
     }
 
     private static class AuthorMapper implements RowMapper<Author> {
