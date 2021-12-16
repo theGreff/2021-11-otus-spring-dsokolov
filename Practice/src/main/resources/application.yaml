@@ -1,7 +1,11 @@
-question:
-  recoursePath: /data/questions.csv
-  correctAnswersToPassTest: 4
+spring:
+  main:
+    allow-circular-references: true
 
 application:
   localePath: /i18n/bundle
   locale: ru_RU
+
+question:
+  recoursePath: /data/questions.csv
+  correctAnswersToPassTest: 4
