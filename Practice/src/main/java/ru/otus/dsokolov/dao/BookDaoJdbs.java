@@ -1,9 +1,11 @@
 package ru.otus.dsokolov.dao;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.dsokolov.domain.Book;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -15,32 +17,42 @@ public class BookDaoJdbs implements BookDao {
     private final NamedParameterJdbcOperations namedParameterJdbc;
     private final BookMapper bookMapper;
 
-    public BookDaoJdbs(NamedParameterJdbcOperations namedParameterJdbc, BookMapper bookMapper) {
+    private final static String errMsg = "Book was not found by {0} = {1}";
+
+    public BookDaoJdbs(NamedParameterJdbcOperations namedParameterJdbc, AuthorDao authorDao, GenreDao genreDao) {
         this.namedParameterJdbc = namedParameterJdbc;
-        this.bookMapper = bookMapper;
+        this.bookMapper = new BookMapper(authorDao, genreDao);
     }
 
     @Override
-    public int count() {
+    public int getCount() {
         Integer count = namedParameterJdbc.queryForObject("select count(*) from book", Collections.emptyMap(), Integer.class);
         return count == null ? 0 : count;
     }
 
     @Override
     public Book getById(long id) {
-        return namedParameterJdbc.queryForObject("select id, title, idauthor, idgenre from book where id = :id",
-                Collections.singletonMap("id", id), bookMapper);
+        try {
+            return namedParameterJdbc.queryForObject("select id, title, idauthor, idgenre from book where id = :id",
+                    Collections.singletonMap("id", id), bookMapper);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new RuntimeException(MessageFormat.format(errMsg, "id", id));
+        }
     }
 
     @Override
     public Book getByTitle(String title) {
-        return namedParameterJdbc.queryForObject("select id, title, idauthor, idgenre from book where title = :title",
-                Collections.singletonMap("title", title), bookMapper);
+        try {
+            return namedParameterJdbc.queryForObject("select id, title, idauthor, idgenre from book where title = :title",
+                    Collections.singletonMap("title", title), bookMapper);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new RuntimeException(MessageFormat.format(errMsg, "title", title));
+        }
     }
 
     @Override
     public List<Book> getAll() {
-        return null;
+        return namedParameterJdbc.query("select id, title, idauthor, idgenre from book", bookMapper);
     }
 
     @Override

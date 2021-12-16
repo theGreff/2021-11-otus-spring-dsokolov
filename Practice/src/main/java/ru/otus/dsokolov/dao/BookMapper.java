@@ -1,13 +1,11 @@
 package ru.otus.dsokolov.dao;
 
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 import ru.otus.dsokolov.domain.Book;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Component
 public class BookMapper implements RowMapper<Book> {
     private final AuthorDao authorDao;
     private final GenreDao genreDao;

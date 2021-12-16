@@ -8,6 +8,8 @@ import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
 
+import java.util.List;
+
 @Component
 public class BookService {
     private final BookDao bookDao;
@@ -25,5 +27,40 @@ public class BookService {
         Genre genre = genreDao.getByName(genreName);
 
         bookDao.insert(new Book(title, author, genre));
+    }
+
+    public void deleteBook(String title) {
+        bookDao.deleteById(bookDao.getByTitle(title).getId());
+    }
+
+    public void changeTitle(String title, String titleNew) {
+        Book book = bookDao.getByTitle(title);
+        book.setTitle(titleNew);
+
+        bookDao.update(book);
+    }
+
+    public void changeAuthor(String bookTitle, String authorFullNameNew) {
+        Book book = bookDao.getByTitle(bookTitle);
+        Author author = authorDao.getByName(authorFullNameNew);
+        book.setAuthor(author);
+
+        bookDao.update(book);
+    }
+
+    public void changeGenre(String bookTitle, String genreNameNew) {
+        Book book = bookDao.getByTitle(bookTitle);
+        Genre genre = genreDao.getByName(genreNameNew);
+        book.setGenre(genre);
+
+        bookDao.update(book);
+    }
+
+    public int getBooksCount() {
+        return bookDao.getCount();
+    }
+
+    public List<Book> getAllBooks() {
+        return bookDao.getAll();
     }
 }
