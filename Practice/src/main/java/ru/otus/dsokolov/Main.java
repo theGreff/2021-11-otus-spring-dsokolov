@@ -16,9 +16,16 @@ public class Main {
         ApplicationContext ctx = SpringApplication.run(Main.class, args);
 
         BookDao bookDao = ctx.getBean(BookDao.class);
-        Book book = new Book();
-        book.setTitle("AAAAAAAAAAAAA");
+        Book book = new Book("AAAAAAAAAAAAA");
         bookDao.insert(book);
+        System.out.println("Count = " + bookDao.count());
+
+        book = bookDao.getByTitle("AAAAAAAAAAAAA");
+        book.setTitle("BBBBBBBBBB");
+        bookDao.update(book);
+
+        book = bookDao.getByTitle("BBBBBBBBBB");
+
         System.out.println("Count = " + bookDao.count());
 
         Console.main(args);

@@ -15,10 +15,12 @@ public class BookDaoJdbs implements BookDao {
 
     private final JdbcOperations jdbc;
     private final NamedParameterJdbcOperations namedParameterJdbc;
+    private final BookMapper bookMapper;
 
-    public BookDaoJdbs(JdbcOperations jdbc, NamedParameterJdbcOperations namedParameterJdbc) {
+    public BookDaoJdbs(JdbcOperations jdbc, NamedParameterJdbcOperations namedParameterJdbc, BookMapper bookMapper) {
         this.jdbc = jdbc;
         this.namedParameterJdbc = namedParameterJdbc;
+        this.bookMapper = bookMapper;
     }
 
     @Override
@@ -29,7 +31,14 @@ public class BookDaoJdbs implements BookDao {
 
     @Override
     public Book getById(long id) {
-        return null;
+        return namedParameterJdbc.queryForObject("select id, title, idauthor, idgenre from book where id = :id",
+                Collections.singletonMap("id", id), bookMapper);
+    }
+
+    @Override
+    public Book getByTitle(String title) {
+        return namedParameterJdbc.queryForObject("select id, title, idauthor, idgenre from book where title = :title",
+                Collections.singletonMap("title", title), bookMapper);
     }
 
     @Override
@@ -39,26 +48,28 @@ public class BookDaoJdbs implements BookDao {
 
     @Override
     public void insert(Book book) {
-        Map values = new HashMap();
-        values.put("id", book.getId());
-        values.put("title", book.getTitle());
-        values.put("idauthor", book.getAuthor() != null ? book.getAuthor().getId() : null);
-        values.put("idgenre", book.getGenre() != null ? book.getId() : null);
-
         namedParameterJdbc.update("insert into book (title, idauthor, idgenre) values (:title, :idauthor, :idgenre)",
-                values);
+                getValues(book));
     }
 
     @Override
     public void update(Book book) {
         namedParameterJdbc.update("update book set title = :title, idauthor = :idauthor" +
-                        ", idgenre = :idgenre where id = :id",
-                Map.of("id", book.getId(), "title", book.getTitle(),
-                        "idauthor", book.getAuthor().getId(), "idgenre", book.getGenre().getId()));
+                ", idgenre = :idgenre where id = :id", getValues(book));
     }
 
     @Override
     public void deleteById(long id) {
         namedParameterJdbc.update("delete from book where id = :id", Collections.singletonMap("id", id));
+    }
+
+    private Map<String, java.io.Serializable> getValues(Book book) {
+        Map<String, java.io.Serializable> values = new HashMap<>();
+        values.put("id", book.getId());
+        values.put("title", book.getTitle());
+        values.put("idauthor", book.getAuthor() != null ? book.getAuthor().getId() : null);
+        values.put("idgenre", book.getGenre() != null ? book.getId() : null);
+
+        return values;
     }
 }

@@ -2,14 +2,19 @@ package ru.otus.dsokolov.domain;
 
 public class Author {
 
-    private Long id;
+    private long id;
     private String fullName;
 
-    public Long getId() {
+    public Author(long id, String fullName) {
+        this.id = id;
+        this.fullName = fullName;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

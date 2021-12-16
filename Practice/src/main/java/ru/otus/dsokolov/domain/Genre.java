@@ -2,14 +2,19 @@ package ru.otus.dsokolov.domain;
 
 public class Genre {
 
-    private Long id;
+    private long id;
     private String name;
 
-    public Long getId() {
+    public Genre(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

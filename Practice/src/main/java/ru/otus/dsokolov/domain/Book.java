@@ -2,16 +2,27 @@ package ru.otus.dsokolov.domain;
 
 public class Book {
 
-    private Long id;
+    private long id;
     private String title;
     private Author author;
     private Genre genre;
 
-    public Long getId() {
+    public Book(long id, String title, Author author, Genre genre) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+    }
+
+    public Book(String title) {
+        this.title = title;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

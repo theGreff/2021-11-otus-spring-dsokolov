@@ -10,6 +10,8 @@ public interface BookDao {
 
     Book getById(long id);
 
+    Book getByTitle(String title);
+
     List<Book> getAll();
 
     void insert(Book book);
