@@ -63,4 +63,8 @@ public class BookService {
     public List<Book> getAllBooks() {
         return bookDao.getAll();
     }
+
+    public Book getBookByTitle(String bookTitle) {
+        return bookDao.getByTitle(bookTitle);
+    }
 }

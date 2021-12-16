@@ -18,9 +18,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @JdbcTest
 @Import({BookDaoJdbs.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
 public class BookDaoJdbcTest {
+
     private static final String BOOK_TITLE = "Оно";
-    private static final String BOOK_AUTHOR = "Стивен Кинг";
-    private static final String BOOK_GENRE = "ужасы";
+    private static final long BOOK_AUTHOR_ID = 5;
+    private static final String BOOK_AUTHOR_NAME = "Стивен Кинг";
+    private static final long BOOK_GENRE_ID = 4;
+    private static final String BOOK_GENRE_NAME = "ужасы";
 
     @Autowired
     BookDaoJdbs bookDaoJdbs;
@@ -28,7 +31,8 @@ public class BookDaoJdbcTest {
     @DisplayName("возвращать ожидаемое кол-во книг из БД")
     @Test
     void shouldReturnExpectedBookCount() {
-        Book bookExpected = new Book(BOOK_TITLE, new Author(5, BOOK_AUTHOR), new Genre(4, BOOK_GENRE));
+        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
         bookDaoJdbs.insert(bookExpected);
 
         assertThat(bookDaoJdbs.getCount()).isEqualTo(1);
@@ -37,7 +41,8 @@ public class BookDaoJdbcTest {
     @DisplayName("возвращать ожидаемую книгу по title")
     @Test
     void shouldReturnExpectedBookByTitle() {
-        Book bookExpected = new Book(BOOK_TITLE, new Author(5, BOOK_AUTHOR), new Genre(4, BOOK_GENRE));
+        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
         bookDaoJdbs.insert(bookExpected);
         Book bookActual = bookDaoJdbs.getByTitle(BOOK_TITLE);
 
@@ -49,7 +54,8 @@ public class BookDaoJdbcTest {
     @DisplayName("возвращать ожидаемую книгу по id")
     @Test
     void shouldReturnExpectedBookById() {
-        Book bookExpected = new Book(BOOK_TITLE, new Author(5, BOOK_AUTHOR), new Genre(4, BOOK_GENRE));
+        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
         bookDaoJdbs.insert(bookExpected);
         Book bookActual = bookDaoJdbs.getById(bookDaoJdbs.getByTitle(BOOK_TITLE).getId());
 
@@ -63,11 +69,13 @@ public class BookDaoJdbcTest {
     void shouldReturnExpectedBookList() {
         List<Book> bookExpectedList = new ArrayList<>();
 
-        Book bookExpected = new Book(BOOK_TITLE, new Author(5, BOOK_AUTHOR), new Genre(4, BOOK_GENRE));
+        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
         bookDaoJdbs.insert(bookExpected);
         bookExpectedList.add(bookExpected);
 
-        Book bookExpected2 = new Book(BOOK_TITLE + 2, new Author(5, BOOK_AUTHOR), new Genre(4, BOOK_GENRE));
+        Book bookExpected2 = new Book(BOOK_TITLE + 2, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
         bookDaoJdbs.insert(bookExpected2);
         bookExpectedList.add(bookExpected2);
 
@@ -81,7 +89,8 @@ public class BookDaoJdbcTest {
     @DisplayName("добавлять книгу в БД")
     @Test
     void shouldInsertBook() {
-        Book bookExpected = new Book(BOOK_TITLE, new Author(5, BOOK_AUTHOR), new Genre(4, BOOK_GENRE));
+        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
         bookDaoJdbs.insert(bookExpected);
         Book bookActual = bookDaoJdbs.getByTitle(BOOK_TITLE);
 
@@ -93,7 +102,8 @@ public class BookDaoJdbcTest {
     @DisplayName("менять в книге наименование")
     @Test
     void shouldUpdateBook() {
-        Book book = new Book(BOOK_TITLE, new Author(5, BOOK_AUTHOR), new Genre(4, BOOK_GENRE));
+        Book book = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
         bookDaoJdbs.insert(book);
 
         Book bookExpected = bookDaoJdbs.getByTitle(BOOK_TITLE);
@@ -110,7 +120,8 @@ public class BookDaoJdbcTest {
     @DisplayName("удалять книгу из БД по id")
     @Test
     void shouldDeleteBookById() {
-        Book book = new Book(BOOK_TITLE, new Author(5, BOOK_AUTHOR), new Genre(4, BOOK_GENRE));
+        Book book = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
         bookDaoJdbs.insert(book);
 
         book = bookDaoJdbs.getByTitle(BOOK_TITLE);
@@ -119,5 +130,4 @@ public class BookDaoJdbcTest {
 
         assertThat(bookDaoJdbs.getCount()).isEqualTo(0);
     }
-
 }
