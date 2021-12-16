@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Сервис для работы с книгами должен")
 @JdbcTest
-@Import({BookService.class, BookDaoJdbs.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
+@Import({BookServiceImpl.class, BookDaoJdbs.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
 public class BookServiceTest {
 
     private static final String BOOK_TITLE = "Оно";
@@ -29,7 +29,7 @@ public class BookServiceTest {
     private static final String BOOK_GENRE_NAME = "ужасы";
 
     @Autowired
-    BookService bookService;
+    BookServiceImpl bookService;
 
     @DisplayName("возвращать ожидаемое кол-во книг из БД")
     @Test
