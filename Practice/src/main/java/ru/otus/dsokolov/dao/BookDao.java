@@ -14,6 +14,8 @@ public interface BookDao {
 
     List<Book> getAll();
 
+    boolean isBookExist(String title);
+
     void insert(Book book);
 
     void update(Book book);

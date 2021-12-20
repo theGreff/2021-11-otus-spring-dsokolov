@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Dao для работы с книгами должно")
 @JdbcTest
-@Import({BookDaoJdbs.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
+@Import(BookDaoJdbs.class)
 public class BookDaoJdbcTest {
 
     private static final String BOOK_TITLE = "Оно";
@@ -36,6 +36,22 @@ public class BookDaoJdbcTest {
         bookDaoJdbs.insert(bookExpected);
 
         assertThat(bookDaoJdbs.getCount()).isEqualTo(1);
+    }
+
+    @DisplayName("возвращать что книга существует")
+    @Test
+    void shouldReturnBookExists() {
+        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
+                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
+        bookDaoJdbs.insert(bookExpected);
+
+        assertThat(bookDaoJdbs.isBookExist(BOOK_TITLE)).isEqualTo(true);
+    }
+
+    @DisplayName("возвращать что книга не существует")
+    @Test
+    void shouldReturnBookNotExists() {
+        assertThat(bookDaoJdbs.isBookExist(BOOK_TITLE + 2)).isEqualTo(false);
     }
 
     @DisplayName("возвращать ожидаемую книгу по title")

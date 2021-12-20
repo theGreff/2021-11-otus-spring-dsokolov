@@ -16,7 +16,7 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     private final NamedParameterJdbcOperations namedParameterJdbc;
 
-    private final static String errMsg = "Author was not found by {0} = {1}";
+    private final static String ERR_MSG = "Error! Author was not found by {0} = {1}";
 
     public AuthorDaoJdbc(NamedParameterJdbcOperations namedParameterJdbc) {
         this.namedParameterJdbc = namedParameterJdbc;
@@ -24,16 +24,12 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public Author getById(long id) {
-        if (id < 1) {
-            return null;
-        }
-
         try {
             return namedParameterJdbc.queryForObject("select id, fullName from author where id = :id",
                     Collections.singletonMap("id", id), new AuthorMapper());
         } catch (
                 EmptyResultDataAccessException ex) {
-            throw new RuntimeException(MessageFormat.format(errMsg, "id", id));
+            throw new RuntimeException(MessageFormat.format(ERR_MSG, "id", id));
         }
     }
 
@@ -44,7 +40,7 @@ public class AuthorDaoJdbc implements AuthorDao {
                     Collections.singletonMap("fullName", name), new AuthorMapper());
         } catch (
                 EmptyResultDataAccessException ex) {
-            throw new RuntimeException(MessageFormat.format(errMsg, "fullName", name));
+            throw new RuntimeException(MessageFormat.format(ERR_MSG, "fullName", name));
         }
     }
 

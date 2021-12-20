@@ -8,10 +8,14 @@ import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 @Component
 public class BookServiceImpl implements BookService {
+
+    private static final String ERR_MSG = "Error! Book with title = {0} already exists";
+
     private final BookDao bookDao;
     private final AuthorDao authorDao;
     private final GenreDao genreDao;
@@ -27,6 +31,10 @@ public class BookServiceImpl implements BookService {
         Author author = authorDao.getByName(authorName);
         Genre genre = genreDao.getByName(genreName);
 
+        if (bookDao.isBookExist(title)) {
+            throw new RuntimeException(MessageFormat.format(ERR_MSG, title));
+        }
+
         bookDao.insert(new Book(title, author, genre));
     }
 
@@ -37,6 +45,9 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void changeTitle(String title, String titleNew) {
+        if (bookDao.isBookExist(titleNew)) {
+            throw new RuntimeException(MessageFormat.format(ERR_MSG, titleNew));
+        }
         Book book = bookDao.getByTitle(title);
         book.setTitle(titleNew);
 

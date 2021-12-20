@@ -17,11 +17,11 @@ public class BookDaoJdbs implements BookDao {
     private final NamedParameterJdbcOperations namedParameterJdbc;
     private final BookMapper bookMapper;
 
-    private final static String errMsg = "Book was not found by {0} = {1}";
+    private final static String ERR_MSG = "Error! Book was not found by {0} = {1}";
 
-    public BookDaoJdbs(NamedParameterJdbcOperations namedParameterJdbc, AuthorDao authorDao, GenreDao genreDao) {
+    public BookDaoJdbs(NamedParameterJdbcOperations namedParameterJdbc) {
         this.namedParameterJdbc = namedParameterJdbc;
-        this.bookMapper = new BookMapper(authorDao, genreDao);
+        this.bookMapper = new BookMapper();
     }
 
     @Override
@@ -33,26 +33,44 @@ public class BookDaoJdbs implements BookDao {
     @Override
     public Book getById(long id) {
         try {
-            return namedParameterJdbc.queryForObject("select id, title, idauthor, idgenre from book where id = :id",
+            return namedParameterJdbc.queryForObject("select b.id, b.title, a.id as idauthor, a.fullname, \n" +
+                            "g.id as idgenre, g.name from book b \n" +
+                            "inner join author a on a.id = b.idauthor \n" +
+                            "inner join genre g on b.idgenre = g.id \n" +
+                            "where b.id = :id",
                     Collections.singletonMap("id", id), bookMapper);
         } catch (EmptyResultDataAccessException ex) {
-            throw new RuntimeException(MessageFormat.format(errMsg, "id", id));
+            throw new RuntimeException(MessageFormat.format(ERR_MSG, "id", id));
         }
     }
 
     @Override
     public Book getByTitle(String title) {
         try {
-            return namedParameterJdbc.queryForObject("select id, title, idauthor, idgenre from book where title = :title",
+            return namedParameterJdbc.queryForObject("select b.id, b.title, a.id as idauthor, a.fullname, \n" +
+                            "g.id as idgenre, g.name from book b \n" +
+                            "inner join author a on a.id = b.idauthor \n" +
+                            "inner join genre g on b.idgenre = g.id \n" +
+                            "where b.title = :title",
                     Collections.singletonMap("title", title), bookMapper);
         } catch (EmptyResultDataAccessException ex) {
-            throw new RuntimeException(MessageFormat.format(errMsg, "title", title));
+            throw new RuntimeException(MessageFormat.format(ERR_MSG, "title", title));
         }
     }
 
     @Override
     public List<Book> getAll() {
-        return namedParameterJdbc.query("select id, title, idauthor, idgenre from book", bookMapper);
+        return namedParameterJdbc.query("select b.id, b.title, a.id as idauthor, a.fullname, \n" +
+                "g.id as idgenre, g.name from book b \n" +
+                "inner join author a on a.id = b.idauthor \n" +
+                "inner join genre g on b.idgenre = g.id", bookMapper);
+    }
+
+    @Override
+    public boolean isBookExist(String title) {
+        Integer count = namedParameterJdbc.queryForObject("select count(*) from book where title = :title",
+                Map.of("title", title), Integer.class);
+        return count != 0;
     }
 
     @Override

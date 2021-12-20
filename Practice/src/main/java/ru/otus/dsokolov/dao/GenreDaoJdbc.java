@@ -16,7 +16,7 @@ public class GenreDaoJdbc implements GenreDao {
 
     private final NamedParameterJdbcOperations namedParameterJdbc;
 
-    private final static String errMsg = "Genre was not found by {0} = {1}";
+    private final static String ERR_MSG = "Error! Genre was not found by {0} = {1}";
 
     public GenreDaoJdbc(final NamedParameterJdbcOperations namedParameterJdbc) {
         this.namedParameterJdbc = namedParameterJdbc;
@@ -24,15 +24,11 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public Genre getById(long id) {
-        if (id < 1) {
-            return null;
-        }
-
         try {
             return namedParameterJdbc.queryForObject("select id, name from genre where id = :id",
                     Collections.singletonMap("id", id), new GenreMapper());
         } catch (EmptyResultDataAccessException ex) {
-            throw new RuntimeException(MessageFormat.format(errMsg, "id", id));
+            throw new RuntimeException(MessageFormat.format(ERR_MSG, "id", id));
         }
     }
 
@@ -42,7 +38,7 @@ public class GenreDaoJdbc implements GenreDao {
             return namedParameterJdbc.queryForObject("select id, name from genre where name = :name",
                     Collections.singletonMap("name", name), new GenreMapper());
         } catch (EmptyResultDataAccessException ex) {
-            throw new RuntimeException(MessageFormat.format(errMsg, "name", name));
+            throw new RuntimeException(MessageFormat.format(ERR_MSG, "name", name));
         }
     }
 
