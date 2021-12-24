@@ -1,5 +1,10 @@
 package ru.otus.dsokolov.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "genre")
 public class Genre {
 
     private long id;
