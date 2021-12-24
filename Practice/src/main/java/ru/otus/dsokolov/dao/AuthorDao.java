@@ -2,9 +2,11 @@ package ru.otus.dsokolov.dao;
 
 import ru.otus.dsokolov.domain.Author;
 
+import java.util.Optional;
+
 public interface AuthorDao {
 
-    Author getById(long id);
+    Optional<Author> getById(long id);
 
-    Author getByName(String name);
+    Optional<Author> getByName(String name);
 }

@@ -3,11 +3,11 @@ package ru.otus.dsokolov.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import ru.otus.dsokolov.dao.AuthorDaoJdbc;
-import ru.otus.dsokolov.dao.BookDaoJdbs;
-import ru.otus.dsokolov.dao.GenreDaoJdbc;
+import ru.otus.dsokolov.dao.AuthorDaoJpa;
+import ru.otus.dsokolov.dao.BookDaoJpa;
+import ru.otus.dsokolov.dao.GenreDaoJpa;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
@@ -18,8 +18,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Сервис для работы с книгами должен")
-@JdbcTest
-@Import({BookServiceImpl.class, BookDaoJdbs.class, AuthorDaoJdbc.class, GenreDaoJdbc.class})
+@DataJpaTest
+@Import({BookServiceImpl.class, BookDaoJpa.class, AuthorServiceImpl.class, GenreServiceImpl.class, AuthorDaoJpa.class, GenreDaoJpa.class})
 public class BookServiceTest {
 
     private static final String BOOK_TITLE = "Оно";
@@ -30,6 +30,24 @@ public class BookServiceTest {
 
     @Autowired
     BookServiceImpl bookService;
+
+    private Book getBook(String bookTitle, long authorId, String authorName, long genreId, String genreName) {
+        Author author = new Author();
+        author.setId(authorId);
+        author.setFullName(authorName);
+
+        Genre genre = new Genre();
+        genre.setId(genreId);
+        genre.setName(genreName);
+
+        Book book = new Book();
+        book.setTitle(bookTitle);
+        book.setAuthor(author);
+        book.setGenre(genre);
+
+        return book;
+    }
+
 
     @DisplayName("возвращать ожидаемое кол-во книг из БД")
     @Test
@@ -45,8 +63,7 @@ public class BookServiceTest {
         bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE);
 
-        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
-                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
+        Book bookExpected = getBook(BOOK_TITLE, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME);
 
         assertThat(bookActual)
                 .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
@@ -69,8 +86,7 @@ public class BookServiceTest {
         bookService.changeAuthor(BOOK_TITLE, "Джоан Роулинг");
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE);
 
-        Book bookExpected = new Book(BOOK_TITLE, new Author(1, "Джоан Роулинг"),
-                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
+        Book bookExpected = getBook(BOOK_TITLE, 1, "Джоан Роулинг", BOOK_GENRE_ID, BOOK_GENRE_NAME);
 
         assertThat(bookActual)
                 .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
@@ -84,8 +100,7 @@ public class BookServiceTest {
         bookService.changeGenre(BOOK_TITLE, "детектив");
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE);
 
-        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
-                new Genre(2, "детектив"));
+        Book bookExpected = getBook(BOOK_TITLE, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, 2, "детектив");
 
         assertThat(bookActual)
                 .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
@@ -99,8 +114,7 @@ public class BookServiceTest {
         bookService.changeTitle(BOOK_TITLE, BOOK_TITLE + 2);
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE + 2);
 
-        Book bookExpected = new Book(BOOK_TITLE + 2, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
-                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
+        Book bookExpected = getBook(BOOK_TITLE + 2, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME);
 
         assertThat(bookActual)
                 .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
@@ -113,8 +127,7 @@ public class BookServiceTest {
         bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE);
 
-        Book bookExpected = new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
-                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME));
+        Book bookExpected = getBook(BOOK_TITLE, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME);
 
         assertThat(bookActual)
                 .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
@@ -129,10 +142,8 @@ public class BookServiceTest {
         List<Book> bookActualList = bookService.getAllBooks();
 
         List<Book> bookExpectedList = new ArrayList<>();
-        bookExpectedList.add(new Book(BOOK_TITLE, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
-                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME)));
-        bookExpectedList.add(new Book(BOOK_TITLE + 2, new Author(BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME),
-                new Genre(BOOK_GENRE_ID, BOOK_GENRE_NAME)));
+        bookExpectedList.add(getBook(BOOK_TITLE, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME));
+        bookExpectedList.add(getBook(BOOK_TITLE + 2, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME));
 
         assertThat(bookActualList)
                 .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")

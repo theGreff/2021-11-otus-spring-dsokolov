@@ -10,7 +10,7 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
-    show-sql: true
+    show-sql: false
   h2:
     console:
       path: /h2-console

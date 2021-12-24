@@ -1,29 +1,26 @@
 package ru.otus.dsokolov.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "book")
+@Table(name = "BOOK")
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BOOK")
+    @SequenceGenerator(name = "SEQ_BOOK", sequenceName = "SEQ_BOOK", allocationSize = 1)
     private long id;
+
+    @Column(name = "TITLE", nullable = false, unique = true)
     private String title;
+
+    @OneToOne(targetEntity = Author.class)
+    @JoinColumn(name = "IDAUTHOR")
     private Author author;
+
+    @OneToOne(targetEntity = Genre.class)
+    @JoinColumn(name = "IDGENRE")
     private Genre genre;
-
-    public Book(long id, String title, Author author, Genre genre) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-    }
-
-    public Book(String title, Author author, Genre genre) {
-        this.title = title;
-        this.author = author;
-        this.genre = genre;
-    }
 
     public long getId() {
         return id;

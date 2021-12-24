@@ -3,22 +3,21 @@ package ru.otus.dsokolov.dao;
 import ru.otus.dsokolov.domain.Book;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookDao {
 
     int getCount();
 
-    Book getById(long id);
+    Optional<Book> getById(long id);
 
-    Book getByTitle(String title);
+    Optional<Book> getByTitle(String title);
 
     List<Book> getAll();
 
     boolean isBookExist(String title);
 
-    void insert(Book book);
+    Book save(Book book);
 
-    void update(Book book);
-
-    void deleteById(long id);
+    void delete(Book book);
 }

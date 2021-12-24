@@ -12,7 +12,7 @@ public class BookShellService {
 
     private final BookServiceImpl bookService;
 
-    public BookShellService(BookServiceImpl bookService) {
+    public BookShellService(final BookServiceImpl bookService) {
         this.bookService = bookService;
     }
 
