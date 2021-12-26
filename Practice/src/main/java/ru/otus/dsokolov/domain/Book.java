@@ -1,6 +1,7 @@
 package ru.otus.dsokolov.domain;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "BOOK")
@@ -15,12 +16,16 @@ public class Book {
     private String title;
 
     @OneToOne(targetEntity = Author.class)
-    @JoinColumn(name = "IDAUTHOR")
+    @JoinColumn(name = "ID_AUTHOR")
     private Author author;
 
     @OneToOne(targetEntity = Genre.class)
-    @JoinColumn(name = "IDGENRE")
+    @JoinColumn(name = "ID_GENRE")
     private Genre genre;
+
+    @OneToMany(targetEntity = BookComment.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JoinColumn(name = "ID")
+    private Set<BookComment> comments;
 
     public long getId() {
         return id;
@@ -52,5 +57,13 @@ public class Book {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public Set<BookComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<BookComment> comments) {
+        this.comments = comments;
     }
 }

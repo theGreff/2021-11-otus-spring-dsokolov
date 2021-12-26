@@ -10,15 +10,17 @@ import java.text.MessageFormat;
 @ShellComponent
 public class BookShellService {
 
-    private final BookServiceImpl bookService;
+    private final BookService bookService;
 
-    public BookShellService(final BookServiceImpl bookService) {
+    public BookShellService(final BookService bookService) {
         this.bookService = bookService;
     }
 
     @ShellMethod(key = "create", value = "create new book")
     public void createBook(@ShellOption String title, @ShellOption String authorName, @ShellOption String genreName) {
-        // create "111" "Стивен Кинг" "ужасы"
+        // create 111 "Стивен Кинг" "ужасы"
+        // create-bc 111 111111111
+        // del-bc-book 111
         bookService.createBook(title, authorName, genreName);
         Book book = bookService.getBookByTitle(title);
 
