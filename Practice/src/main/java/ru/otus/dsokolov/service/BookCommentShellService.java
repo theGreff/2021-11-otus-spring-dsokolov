@@ -6,6 +6,9 @@ import org.springframework.shell.standard.ShellOption;
 import ru.otus.dsokolov.domain.BookComment;
 
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,8 +34,17 @@ public class BookCommentShellService {
     }
 
     @ShellMethod(key = "get-bc-date", value = "get book comments by date")
-    public void getAllCommentsByDate(Date date) {
-        List<BookComment> bcList = bookCommentService.getAllCommentsByDate(date);
+    public void getAllCommentsByDate(String date) {
+        Date dateFormatted;
+        SimpleDateFormat sdf = new SimpleDateFormat();
+        try {
+            sdf.applyPattern("dd.MM.yyyy");
+            dateFormatted = sdf.parse(date);
+        } catch (ParseException e) {
+            throw new RuntimeException("Wrong date format");
+        }
+
+        List<BookComment> bcList = bookCommentService.getAllCommentsByDate(dateFormatted);
         bcList.forEach(o ->
                 System.out.println(MessageFormat.format("Title = {0}. Comment = {1}. Date = {2}",
                         o.getBook().getTitle(), o.getComment(), o.getDateInsert())));
@@ -44,14 +56,14 @@ public class BookCommentShellService {
         System.out.println(MessageFormat.format("Book comment was created with id = {0}", bc.getId()));
     }
 
-    @ShellMethod(key = "del-bc-book", value = "delete book comment by book title")
-    public void delBookCommentsByBookTitle(@ShellOption String bookTitle) {
-        bookCommentService.delBookCommentsByBookTitle(bookTitle);
-    }
-
     @ShellMethod(key = "del-bc-id", value = "delete book comment by id")
     public void delBookCommentsByBookTitle(@ShellOption long id) {
         bookCommentService.delBookCommentsById(id);
+    }
+
+    @ShellMethod(key = "del-bc-book", value = "delete book comment by book title")
+    public void delBookCommentsByBookTitle(@ShellOption String title) {
+        bookCommentService.delBookCommentsByBookTitle(title);
     }
 
     @ShellMethod(key = "change-bc-id", value = "change book comment by id")

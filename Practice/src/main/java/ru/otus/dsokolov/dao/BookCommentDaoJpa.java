@@ -26,7 +26,8 @@ public class BookCommentDaoJpa implements BookCommentDao {
 
     @Override
     public List<BookComment> getByDate(Date date) {
-        return em.createQuery("select bc from BookComment bc join fetch bc.book where dateInsert = :dateInsert",
+        return em.createQuery("select bc from BookComment bc join fetch bc.book b join fetch b.author join fetch b.genre " +
+                                "where bc.dateInsert = :dateInsert",
                         BookComment.class)
                 .setParameter("dateInsert", date)
                 .getResultList();
@@ -34,7 +35,8 @@ public class BookCommentDaoJpa implements BookCommentDao {
 
     @Override
     public List<BookComment> getAll() {
-        return em.createQuery("select bc from BookComment bc join fetch bc.book", BookComment.class).getResultList();
+        return em.createQuery("select bc from BookComment bc join fetch bc.book b join fetch b.author join fetch b.genre",
+                BookComment.class).getResultList();
     }
 
     @Override

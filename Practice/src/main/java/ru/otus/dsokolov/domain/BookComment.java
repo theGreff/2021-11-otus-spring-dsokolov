@@ -18,7 +18,7 @@ public class BookComment {
     private Date dateInsert;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ID_BOOK", referencedColumnName = "id")
+    @JoinColumn(name = "ID_BOOK")
     private Book book;
 
     public long getId() {

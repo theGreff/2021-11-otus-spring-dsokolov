@@ -23,8 +23,7 @@ public class Book {
     @JoinColumn(name = "ID_GENRE")
     private Genre genre;
 
-    @OneToMany(targetEntity = BookComment.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "ID")
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private Set<BookComment> comments;
 
     public long getId() {

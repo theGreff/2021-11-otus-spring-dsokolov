@@ -15,9 +15,9 @@ interface BookCommentService {
 
     BookComment createBookComment(String bookTitle, String comment);
 
-    void delBookCommentsByBookTitle(String bookTitle);
-
     void delBookCommentsById(long id);
+
+    void delBookCommentsByBookTitle(String title);
 
     void changeCommentById(long id, String commentNew);
 }

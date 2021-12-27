@@ -9,6 +9,7 @@ import ru.otus.dsokolov.domain.BookComment;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class BookCommentServiceImpl implements BookCommentService {
@@ -55,16 +56,19 @@ public class BookCommentServiceImpl implements BookCommentService {
         return bc;
     }
 
-    @Override
-    @Transactional
-    public void delBookCommentsByBookTitle(String bookTitle) {
-        Book book = bookService.getBookByTitle(bookTitle);
-        book.getComments().forEach(bookCommentDao::delete);
-    }
-
     @Transactional
     public void delBookCommentsById(long id) {
         bookCommentDao.delete(bookCommentDao.getById(id).get());
+    }
+
+    @Override
+    @Transactional
+    public void delBookCommentsByBookTitle(String title) {
+        Book book = bookService.getBookByTitle(title);
+        Set<BookComment> bcList = book.getComments();
+        for (BookComment bc : bcList) {
+            bookCommentDao.delete(bc);
+        }
     }
 
     @Override
