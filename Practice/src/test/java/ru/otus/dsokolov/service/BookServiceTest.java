@@ -29,7 +29,7 @@ public class BookServiceTest {
     private static final String BOOK_GENRE_NAME = "ужасы";
 
     @Autowired
-    BookServiceImpl bookService;
+    private BookServiceImpl bookService;
 
     private Book getBook(String bookTitle, long authorId, String authorName, long genreId, String genreName) {
         Author author = new Author();
@@ -47,7 +47,6 @@ public class BookServiceTest {
 
         return book;
     }
-
 
     @DisplayName("возвращать ожидаемое кол-во книг из БД")
     @Test

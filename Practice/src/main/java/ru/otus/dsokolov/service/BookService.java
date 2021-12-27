@@ -12,7 +12,7 @@ interface BookService {
 
     int getBooksCount();
 
-    void createBook(String title, String authorName, String genreName);
+    Book createBook(String title, String authorName, String genreName);
 
     void deleteBook(String title);
 

@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface BookCommentDao {
 
+    int getCount();
+
     Optional<BookComment> getById(long id);
 
     List<BookComment> getByDate(Date date);

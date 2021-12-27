@@ -20,6 +20,11 @@ public class BookCommentDaoJpa implements BookCommentDao {
     }
 
     @Override
+    public int getCount() {
+        return em.createQuery("select count(bc) from BookComment bc", Long.class).getSingleResult().intValue();
+    }
+
+    @Override
     public Optional<BookComment> getById(long id) {
         return Optional.ofNullable(em.find(BookComment.class, id));
     }

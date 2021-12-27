@@ -9,4 +9,4 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
-    how-sql: false
+    show-sql: false

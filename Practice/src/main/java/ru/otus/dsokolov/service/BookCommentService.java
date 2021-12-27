@@ -9,13 +9,17 @@ interface BookCommentService {
 
     int getBookCommentsCount();
 
+    BookComment getCommentById(long id);
+
     List<BookComment> getAllComments();
 
     List<BookComment> getAllCommentsByDate(Date date);
 
-    BookComment createBookComment(String bookTitle, String comment);
+    List<BookComment> getAllCommentsByBookTitle(String bookTitle);
 
-    void delBookCommentsById(long id);
+    BookComment createBookComment(String bookTitle, String comment, Date dateInsert);
+
+    void delBookCommentById(long id);
 
     void delBookCommentsByBookTitle(String title);
 

@@ -3,9 +3,11 @@ package ru.otus.dsokolov.service;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import ru.otus.dsokolov.base.Utils;
 import ru.otus.dsokolov.domain.Book;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 @ShellComponent
 public class BookShellService {
@@ -21,8 +23,7 @@ public class BookShellService {
         // create 111 "Стивен Кинг" "ужасы"
         // create-bc 111 111111111
         // del-bc-book 111
-        bookService.createBook(title, authorName, genreName);
-        Book book = bookService.getBookByTitle(title);
+        Book book = bookService.createBook(title, authorName, genreName);
 
         System.out.println(MessageFormat.format("Book was created with id = {0}", book.getId()));
     }
@@ -34,9 +35,14 @@ public class BookShellService {
 
     @ShellMethod(key = "get-all", value = "get all book")
     public void getAll() {
-        bookService.getAllBooks().forEach(
-                o -> System.out.println(MessageFormat.format("Title = {0}. Author = {1}. Genre = {2}",
-                        o.getTitle(), o.getAuthor().getFullName(), o.getGenre().getName())));
+        List<Book> bookList = bookService.getAllBooks();
+        if (bookList.isEmpty()) {
+            Utils.printEmptyResult();
+            return;
+        }
+
+        bookList.forEach(o -> System.out.println(MessageFormat.format("Title = {0}. Author = {1}. Genre = {2}",
+                o.getTitle(), o.getAuthor().getFullName(), o.getGenre().getName())));
     }
 
     @ShellMethod(key = "find", value = "find book by title")

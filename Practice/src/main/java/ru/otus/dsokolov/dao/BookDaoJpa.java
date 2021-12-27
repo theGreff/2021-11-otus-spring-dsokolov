@@ -30,7 +30,8 @@ public class BookDaoJpa implements BookDao {
 
     @Override
     public Optional<Book> getByTitle(String title) {
-        List<Book> bookList = em.createQuery("select b from Book b join fetch b.author join fetch b.genre where b.title = :title", Book.class)
+        List<Book> bookList = em.createQuery("select b from Book b join fetch b.author join fetch b.genre " +
+                        "where b.title = :title", Book.class)
                 .setParameter("title", title)
                 .getResultList();
         if (bookList.isEmpty()) {

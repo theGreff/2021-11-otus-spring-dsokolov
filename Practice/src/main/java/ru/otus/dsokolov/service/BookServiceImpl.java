@@ -28,7 +28,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void createBook(String title, String authorName, String genreName) {
+    public Book createBook(String title, String authorName, String genreName) {
         checkBookExist(title);
 
         Book book = new Book();
@@ -36,7 +36,7 @@ public class BookServiceImpl implements BookService {
         book.setAuthor(authorService.getByName(authorName));
         book.setGenre(genreService.getByName(genreName));
 
-        bookDao.save(book);
+        return bookDao.save(book);
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.util.Date;
 @Entity
 @Table(name = "BOOK_COMMENT")
 public class BookComment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_BOOK_COMMENT")
     @SequenceGenerator(name = "SEQ_BOOK_COMMENT", sequenceName = "SEQ_BOOK_COMMENT", allocationSize = 1)

@@ -23,7 +23,7 @@ public class Book {
     @JoinColumn(name = "ID_GENRE")
     private Genre genre;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<BookComment> comments;
 
     public long getId() {
