@@ -3,6 +3,7 @@ package ru.otus.dsokolov.service;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dsokolov.base.Utils;
 import ru.otus.dsokolov.domain.BookComment;
 
@@ -26,6 +27,7 @@ public class BookCommentShellService {
     }
 
     @ShellMethod(key = "get-bc-all", value = "get all comments of all books")
+    @Transactional(readOnly = true)
     public void getAllComments() {
         List<BookComment> bcList = bookCommentService.getAllComments();
         if (bcList.isEmpty()) {
@@ -37,6 +39,7 @@ public class BookCommentShellService {
     }
 
     @ShellMethod(key = "get-bc-book", value = "get all book comments by book title")
+    @Transactional(readOnly = true)
     public void getAllCommentsByBook(String bookTitle) {
         List<BookComment> bcList = bookCommentService.getAllCommentsByBookTitle(bookTitle);
         if (bcList.isEmpty()) {
@@ -48,6 +51,7 @@ public class BookCommentShellService {
     }
 
     @ShellMethod(key = "get-bc-date", value = "get book comments by date")
+    @Transactional(readOnly = true)
     public void getAllCommentsByDate(String date) {
         List<BookComment> bcList = bookCommentService.getAllCommentsByDate(Utils.dateStrFormat(date));
         if (bcList.isEmpty()) {

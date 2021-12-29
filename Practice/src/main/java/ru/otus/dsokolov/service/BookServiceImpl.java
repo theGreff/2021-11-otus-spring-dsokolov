@@ -2,10 +2,10 @@ package ru.otus.dsokolov.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.dsokolov.dao.BookDao;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
+import ru.otus.dsokolov.repository.BookRepository;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -16,12 +16,12 @@ public class BookServiceImpl implements BookService {
     private static final String ERR_MSG_BOOK_EXIST = "Error! Book with title = {0} already exists";
     private final static String ERR_MSG_BOOK_NOT_FOUND = "Error! Book was not found by {0} = {1}";
 
-    private final BookDao bookDao;
+    private final BookRepository bookRepository;
     private final AuthorService authorService;
     private final GenreService genreService;
 
-    public BookServiceImpl(final BookDao bookDao, final AuthorService authorService, final GenreService genreService) {
-        this.bookDao = bookDao;
+    public BookServiceImpl(final BookRepository bookRepository, final AuthorService authorService, final GenreService genreService) {
+        this.bookRepository = bookRepository;
         this.authorService = authorService;
         this.genreService = genreService;
     }
@@ -36,13 +36,13 @@ public class BookServiceImpl implements BookService {
         book.setAuthor(authorService.getByName(authorName));
         book.setGenre(genreService.getByName(genreName));
 
-        return bookDao.save(book);
+        return bookRepository.save(book);
     }
 
     @Override
     @Transactional
     public void deleteBook(String title) {
-        bookDao.delete(getBookByTitle(title));
+        bookRepository.delete(getBookByTitle(title));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class BookServiceImpl implements BookService {
         Book book = getBookByTitle(title);
         book.setTitle(titleNew);
 
-        bookDao.save(book);
+        bookRepository.save(book);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class BookServiceImpl implements BookService {
         Author author = authorService.getByName(authorFullNameNew);
         book.setAuthor(author);
 
-        bookDao.save(book);
+        bookRepository.save(book);
     }
 
     @Override
@@ -72,30 +72,30 @@ public class BookServiceImpl implements BookService {
         Genre genre = genreService.getByName(genreNameNew);
         book.setGenre(genre);
 
-        bookDao.save(book);
+        bookRepository.save(book);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public int getBooksCount() {
-        return bookDao.getCount();
+    public long getCount() {
+        return bookRepository.count();
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Book> getAllBooks() {
-        return bookDao.getAll();
+    public List<Book> findAll() {
+        return bookRepository.findAll();
     }
 
     @Override
     @Transactional(readOnly = true)
     public Book getBookByTitle(String bookTitle) {
-        return bookDao.getByTitle(bookTitle).orElseThrow(() ->
+        return bookRepository.getByTitle(bookTitle).orElseThrow(() ->
                 new RuntimeException(MessageFormat.format(ERR_MSG_BOOK_NOT_FOUND, "title", bookTitle)));
     }
 
     private void checkBookExist(String title) {
-        if (bookDao.isBookExist(title)) {
+        if (bookRepository.existsByTitle(title)) {
             throw new RuntimeException(MessageFormat.format(ERR_MSG_BOOK_EXIST, title));
         }
     }

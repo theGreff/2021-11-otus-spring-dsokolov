@@ -2,8 +2,8 @@ package ru.otus.dsokolov.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.dsokolov.dao.GenreDao;
 import ru.otus.dsokolov.domain.Genre;
+import ru.otus.dsokolov.repository.GenreRepository;
 
 import java.text.MessageFormat;
 
@@ -12,21 +12,21 @@ public class GenreServiceImpl implements GenreService {
 
     private final static String ERR_MSG = "Error! Genre was not found by {0} = {1}";
 
-    private final GenreDao genreDao;
+    private final GenreRepository genreRepository;
 
-    public GenreServiceImpl(final GenreDao genreDao) {
-        this.genreDao = genreDao;
+    public GenreServiceImpl(final GenreRepository genreRepository) {
+        this.genreRepository = genreRepository;
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Genre getById(long id) {
-        return genreDao.getById(id).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "id", id)));
+        return genreRepository.getById(id).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "id", id)));
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public Genre getByName(String name) {
-        return genreDao.getByName(name).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "name", name)));
+        return genreRepository.getByName(name).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "name", name)));
     }
 }

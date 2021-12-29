@@ -9,6 +9,12 @@ import ru.otus.dsokolov.domain.Book;
 import java.text.MessageFormat;
 import java.util.List;
 
+/*
+ create 111 "Стивен Кинг" "ужасы"
+ create-bc 111 111111111
+ del-bc-book 111
+*/
+
 @ShellComponent
 public class BookShellService {
 
@@ -20,9 +26,6 @@ public class BookShellService {
 
     @ShellMethod(key = "create", value = "create new book")
     public void createBook(@ShellOption String title, @ShellOption String authorName, @ShellOption String genreName) {
-        // create 111 "Стивен Кинг" "ужасы"
-        // create-bc 111 111111111
-        // del-bc-book 111
         Book book = bookService.createBook(title, authorName, genreName);
 
         System.out.println(MessageFormat.format("Book was created with id = {0}", book.getId()));
@@ -30,12 +33,12 @@ public class BookShellService {
 
     @ShellMethod(key = "get-cnt", value = "get book count")
     public void getCount() {
-        System.out.println(MessageFormat.format("Book count = {0}", bookService.getBooksCount()));
+        System.out.println(MessageFormat.format("Book count = {0}", bookService.getCount()));
     }
 
     @ShellMethod(key = "get-all", value = "get all book")
     public void getAll() {
-        List<Book> bookList = bookService.getAllBooks();
+        List<Book> bookList = bookService.findAll();
         if (bookList.isEmpty()) {
             Utils.printEmptyResult();
             return;

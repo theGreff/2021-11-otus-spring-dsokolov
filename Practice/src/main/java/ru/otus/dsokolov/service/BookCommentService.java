@@ -7,7 +7,7 @@ import java.util.List;
 
 interface BookCommentService {
 
-    int getBookCommentsCount();
+    long getBookCommentsCount();
 
     BookComment getCommentById(long id);
 

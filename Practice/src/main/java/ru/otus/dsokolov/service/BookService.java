@@ -6,11 +6,11 @@ import java.util.List;
 
 interface BookService {
 
-    List<Book> getAllBooks();
+    List<Book> findAll();
 
     Book getBookByTitle(String bookTitle);
 
-    int getBooksCount();
+    long getCount();
 
     Book createBook(String title, String authorName, String genreName);
 

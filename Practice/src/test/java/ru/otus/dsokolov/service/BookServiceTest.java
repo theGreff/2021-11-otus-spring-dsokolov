@@ -5,9 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import ru.otus.dsokolov.dao.AuthorDaoJpa;
-import ru.otus.dsokolov.dao.BookDaoJpa;
-import ru.otus.dsokolov.dao.GenreDaoJpa;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
@@ -19,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Сервис для работы с книгами должен")
 @DataJpaTest
-@Import({BookServiceImpl.class, BookDaoJpa.class, AuthorServiceImpl.class, GenreServiceImpl.class, AuthorDaoJpa.class, GenreDaoJpa.class})
+@Import({BookServiceImpl.class, AuthorServiceImpl.class, GenreServiceImpl.class})
 public class BookServiceTest {
 
     private static final String BOOK_TITLE = "Оно";
@@ -53,7 +50,7 @@ public class BookServiceTest {
     void shouldReturnExpectedBookCount() {
         bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
 
-        assertThat(bookService.getBooksCount()).isEqualTo(1);
+        assertThat(bookService.getCount()).isEqualTo(1);
     }
 
     @DisplayName("добавлять книгу в БД")
@@ -75,7 +72,7 @@ public class BookServiceTest {
         bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
         bookService.deleteBook(BOOK_TITLE);
 
-        assertThat(bookService.getBooksCount()).isEqualTo(0);
+        assertThat(bookService.getCount()).isEqualTo(0);
     }
 
     @DisplayName("менять в книге автора")
@@ -138,7 +135,7 @@ public class BookServiceTest {
     void shouldReturnExpectedBookList() {
         bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
         bookService.createBook(BOOK_TITLE + 2, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
-        List<Book> bookActualList = bookService.getAllBooks();
+        List<Book> bookActualList = bookService.findAll();
 
         List<Book> bookExpectedList = new ArrayList<>();
         bookExpectedList.add(getBook(BOOK_TITLE, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME));

@@ -7,10 +7,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.dsokolov.base.Utils;
-import ru.otus.dsokolov.dao.AuthorDaoJpa;
-import ru.otus.dsokolov.dao.BookCommentDaoJpa;
-import ru.otus.dsokolov.dao.BookDaoJpa;
-import ru.otus.dsokolov.dao.GenreDaoJpa;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.BookComment;
 
@@ -23,8 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Сервис для работы с коментариями к книгам должен")
 @DataJpaTest
-@Import({BookCommentServiceImpl.class, BookServiceImpl.class, AuthorServiceImpl.class, GenreServiceImpl.class,
-        BookDaoJpa.class, AuthorDaoJpa.class, GenreDaoJpa.class, BookCommentDaoJpa.class})
+@Import({BookCommentServiceImpl.class, BookServiceImpl.class, AuthorServiceImpl.class, GenreServiceImpl.class})
 public class BookCommentServiceTest {
 
     private static final String BOOK_TITLE = "Оно";
