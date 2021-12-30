@@ -1,7 +1,6 @@
 package ru.otus.dsokolov.service;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.repository.AuthorRepository;
 
@@ -19,13 +18,11 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Author getById(long id) {
         return authorRepository.getById(id).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "id", id)));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Author getByName(String name) {
         return authorRepository.getByFullName(name).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "name", name)));
     }

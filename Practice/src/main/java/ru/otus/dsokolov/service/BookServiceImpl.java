@@ -76,19 +76,16 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public long getCount() {
         return bookRepository.count();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Book getBookByTitle(String bookTitle) {
         return bookRepository.getByTitle(bookTitle).orElseThrow(() ->
                 new RuntimeException(MessageFormat.format(ERR_MSG_BOOK_NOT_FOUND, "title", bookTitle)));

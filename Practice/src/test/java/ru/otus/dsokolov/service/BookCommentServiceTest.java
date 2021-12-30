@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.dsokolov.base.Utils;
 import ru.otus.dsokolov.domain.Book;
@@ -12,7 +11,6 @@ import ru.otus.dsokolov.domain.BookComment;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,8 +31,6 @@ public class BookCommentServiceTest {
     private BookCommentServiceImpl bookCommentService;
     @Autowired
     private BookServiceImpl bookService;
-    @Autowired
-    private TestEntityManager em;
 
     private BookComment getBookComment(Book book, String comment, Date dateIns) {
         BookComment bc = new BookComment();
@@ -99,10 +95,8 @@ public class BookCommentServiceTest {
     void shouldReturnExpectedBookCommentListByBook() {
         Book book = bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
         Date dateIns = new Date();
-        List<BookComment> lst = new ArrayList<>();
-        lst.add(bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns));
-        lst.add(bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns));
-        book.setComments(new HashSet<>(lst));
+        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
+        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns);
 
         List<BookComment> actualList = bookCommentService.getAllCommentsByBookTitle(BOOK_TITLE);
 
@@ -152,14 +146,22 @@ public class BookCommentServiceTest {
     @DisplayName("удалять все коментарии к книге")
     @Test
     void shouldDeleteAllBookCommentsByTitle() {
-        Book book = bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
-        List<BookComment> lst = new ArrayList<>();
-        lst.add(bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date()));
-        lst.add(bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, new Date()));
-        book.setComments(new HashSet<>(lst));
-
+        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
+        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, new Date());
         bookCommentService.delBookCommentsByBookTitle(BOOK_TITLE);
-        em.flush();
+
+        assertThat(bookCommentService.getBookCommentsCount()).isEqualTo(0);
+    }
+
+    @DisplayName("удалять все коментарии по дате")
+    @Test
+    void shouldDeleteAllBookCommentsByDate() {
+        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        Date dateIns = Utils.dateStrFormat("12.12.2021");
+        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
+        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns);
+        bookCommentService.delBookCommentsByDate(dateIns);
 
         assertThat(bookCommentService.getBookCommentsCount()).isEqualTo(0);
     }

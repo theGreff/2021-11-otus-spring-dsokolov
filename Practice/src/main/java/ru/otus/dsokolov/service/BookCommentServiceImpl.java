@@ -7,7 +7,8 @@ import ru.otus.dsokolov.domain.BookComment;
 import ru.otus.dsokolov.repository.BookCommentRepository;
 
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 @Component
 public class BookCommentServiceImpl implements BookCommentService {
@@ -23,40 +24,29 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public long getBookCommentsCount() {
         return bookCommentRepository.count();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public BookComment getCommentById(long id) {
         return bookCommentRepository.getById(id).orElseThrow(() ->
                 new RuntimeException(MessageFormat.format(ERR_MSG_BOOK_COMMENT_NOT_FOUND, "id", id)));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<BookComment> getAllComments() {
         return bookCommentRepository.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<BookComment> getAllCommentsByDate(Date date) {
         return bookCommentRepository.getByDateInsert(date);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<BookComment> getAllCommentsByBookTitle(String bookTitle) {
-        Book book = bookService.getBookByTitle(bookTitle);
-        Set<BookComment> bookComments = book.getComments();
-        if (bookComments == null) {
-            return Collections.emptyList();
-        }
-
-        return new ArrayList<>(bookComments);
+        return bookCommentRepository.getByBookTitle(bookTitle);
     }
 
     @Override
@@ -68,6 +58,7 @@ public class BookCommentServiceImpl implements BookCommentService {
         bc.setComment(comment);
         bc.setBook(book);
         bc.setDateInsert(dateInsert);
+
         bookCommentRepository.save(bc);
 
         return bc;
@@ -81,9 +72,18 @@ public class BookCommentServiceImpl implements BookCommentService {
     @Override
     @Transactional
     public void delBookCommentsByBookTitle(String title) {
-        Book book = bookService.getBookByTitle(title);
+        List<BookComment> bcList = getAllCommentsByBookTitle(title);
 
-        Set<BookComment> bcList = book.getComments();
+        for (BookComment bc : bcList) {
+            bookCommentRepository.delete(bc);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void delBookCommentsByDate(Date date) {
+        List<BookComment> bcList = getAllCommentsByDate(date);
+
         for (BookComment bc : bcList) {
             bookCommentRepository.delete(bc);
         }

@@ -15,6 +15,8 @@ public interface BookCommentRepository extends JpaRepository<BookComment, Long> 
 
     List<BookComment> getByDateInsert(Date date);
 
+    List<BookComment> getByBookTitle(String bookTitle);
+
     List<BookComment> findAll();
 
     BookComment save(BookComment comment);

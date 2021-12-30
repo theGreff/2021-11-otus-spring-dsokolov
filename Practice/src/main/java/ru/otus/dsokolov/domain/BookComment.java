@@ -18,7 +18,7 @@ public class BookComment {
     @Column(name = "DATE_INSERT")
     private Date dateInsert;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ID_BOOK")
     private Book book;
 

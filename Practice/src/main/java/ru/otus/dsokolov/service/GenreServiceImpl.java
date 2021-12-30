@@ -1,7 +1,6 @@
 package ru.otus.dsokolov.service;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dsokolov.domain.Genre;
 import ru.otus.dsokolov.repository.GenreRepository;
 
@@ -19,13 +18,11 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    @Transactional
     public Genre getById(long id) {
         return genreRepository.getById(id).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "id", id)));
     }
 
     @Override
-    @Transactional
     public Genre getByName(String name) {
         return genreRepository.getByName(name).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "name", name)));
     }

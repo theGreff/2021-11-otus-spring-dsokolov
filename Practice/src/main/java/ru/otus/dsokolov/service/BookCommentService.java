@@ -21,6 +21,8 @@ interface BookCommentService {
 
     void delBookCommentById(long id);
 
+    void delBookCommentsByDate(Date date);
+
     void delBookCommentsByBookTitle(String title);
 
     void changeCommentById(long id, String commentNew);

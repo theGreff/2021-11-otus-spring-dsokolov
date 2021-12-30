@@ -3,7 +3,6 @@ package ru.otus.dsokolov.service;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dsokolov.base.Utils;
 import ru.otus.dsokolov.domain.BookComment;
 
@@ -27,7 +26,6 @@ public class BookCommentShellService {
     }
 
     @ShellMethod(key = "get-bc-all", value = "get all comments of all books")
-    @Transactional(readOnly = true)
     public void getAllComments() {
         List<BookComment> bcList = bookCommentService.getAllComments();
         if (bcList.isEmpty()) {
@@ -39,7 +37,6 @@ public class BookCommentShellService {
     }
 
     @ShellMethod(key = "get-bc-book", value = "get all book comments by book title")
-    @Transactional(readOnly = true)
     public void getAllCommentsByBook(String bookTitle) {
         List<BookComment> bcList = bookCommentService.getAllCommentsByBookTitle(bookTitle);
         if (bcList.isEmpty()) {
@@ -51,7 +48,6 @@ public class BookCommentShellService {
     }
 
     @ShellMethod(key = "get-bc-date", value = "get book comments by date")
-    @Transactional(readOnly = true)
     public void getAllCommentsByDate(String date) {
         List<BookComment> bcList = bookCommentService.getAllCommentsByDate(Utils.dateStrFormat(date));
         if (bcList.isEmpty()) {
@@ -73,6 +69,13 @@ public class BookCommentShellService {
         bookCommentService.delBookCommentById(id);
 
         System.out.println(MessageFormat.format("The comment with id = {0} was deleted", id));
+    }
+
+    @ShellMethod(key = "del-bc-date", value = "delete book comment on date")
+    public void delBookCommentsByBookDate(@ShellOption String date) {
+        bookCommentService.delBookCommentsByDate(Utils.dateStrFormat(date));
+
+        System.out.println(MessageFormat.format("All comments on date = {0} were deleted", date));
     }
 
     @ShellMethod(key = "del-bc-book", value = "delete book comment by book title")
