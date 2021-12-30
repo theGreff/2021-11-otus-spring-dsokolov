@@ -9,17 +9,9 @@ import java.util.Optional;
 
 public interface BookCommentRepository extends JpaRepository<BookComment, Long> {
 
-    long count();
-
     Optional<BookComment> getById(long id);
 
     List<BookComment> getByDateInsert(Date date);
 
     List<BookComment> getByBookTitle(String bookTitle);
-
-    List<BookComment> findAll();
-
-    BookComment save(BookComment comment);
-
-    void delete(BookComment comment);
 }

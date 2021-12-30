@@ -8,17 +8,7 @@ import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    long count();
-
-    Optional<Book> getById(long id);
-
     Optional<Book> getByTitle(String title);
 
-    List<Book> findAll();
-
     boolean existsByTitle(String title);
-
-    Book save(Book book);
-
-    void delete(Book book);
 }
