@@ -28,4 +28,12 @@ public class Author {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
+
+    public Author(long id, String fullName) {
+        this.id = id;
+        this.fullName = fullName;
+    }
+
+    public Author() {
+    }
 }
