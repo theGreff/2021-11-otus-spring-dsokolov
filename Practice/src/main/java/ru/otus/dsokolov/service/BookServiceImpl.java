@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
+import ru.otus.dsokolov.dto.BookDto;
 import ru.otus.dsokolov.repository.BookRepository;
 
 import java.text.MessageFormat;
@@ -91,9 +92,38 @@ public class BookServiceImpl implements BookService {
                 new RuntimeException(MessageFormat.format(ERR_MSG_BOOK_NOT_FOUND, "title", bookTitle)));
     }
 
+    @Override
+    public Book getById(long id) {
+        return bookRepository.getById(id);
+    }
+
     private void checkBookExist(String title) {
         if (bookRepository.existsByTitle(title)) {
             throw new RuntimeException(MessageFormat.format(ERR_MSG_BOOK_EXIST, title));
         }
+    }
+
+    @Override
+    @Transactional
+    public Book createBook(BookDto bookDto) {
+        checkBookExist(bookDto.getTitle());
+
+        Book bookNew = new Book();
+        bookNew.setTitle(bookDto.getTitle());
+        bookNew.setAuthor(bookDto.getAuthor());
+        bookNew.setGenre(bookDto.getGenre());
+
+        return bookRepository.save(bookNew);
+    }
+
+    @Override
+    @Transactional
+    public void update(BookDto bookDto) {
+        Book bookOld = bookRepository.getById(bookDto.getId());
+        bookOld.setTitle(bookDto.getTitle());
+        bookOld.setAuthor(bookDto.getAuthor());
+        bookOld.setGenre(bookDto.getGenre());
+
+        bookRepository.save(bookOld);
     }
 }

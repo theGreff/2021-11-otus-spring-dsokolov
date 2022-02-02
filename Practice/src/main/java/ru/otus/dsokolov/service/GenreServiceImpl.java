@@ -5,6 +5,7 @@ import ru.otus.dsokolov.domain.Genre;
 import ru.otus.dsokolov.repository.GenreRepository;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 @Component
 public class GenreServiceImpl implements GenreService {
@@ -25,5 +26,10 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Genre getByName(String name) {
         return genreRepository.getByName(name).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "name", name)));
+    }
+
+    @Override
+    public List<Genre> getAll() {
+        return genreRepository.findAll();
     }
 }

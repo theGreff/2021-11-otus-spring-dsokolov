@@ -5,6 +5,7 @@ import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.repository.AuthorRepository;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 @Component
 public class AuthorServiceImpl implements AuthorService {
@@ -25,5 +26,10 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author getByName(String name) {
         return authorRepository.getByFullName(name).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "name", name)));
+    }
+
+    @Override
+    public List<Author> getAll() {
+        return authorRepository.findAll();
     }
 }
