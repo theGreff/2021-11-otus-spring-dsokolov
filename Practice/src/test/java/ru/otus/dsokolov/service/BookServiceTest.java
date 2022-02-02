@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Import;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
+import ru.otus.dsokolov.dto.BookDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,9 @@ public class BookServiceTest {
     @DisplayName("возвращать ожидаемое кол-во книг из БД")
     @Test
     void shouldReturnExpectedBookCount() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
 
         assertThat(bookService.getCount()).isEqualTo(1);
     }
@@ -56,21 +59,26 @@ public class BookServiceTest {
     @DisplayName("добавлять книгу в БД")
     @Test
     void shouldCreateBook() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE);
 
         Book bookExpected = getBook(BOOK_TITLE, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME);
 
         assertThat(bookActual)
-                .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
+                .usingRecursiveComparison()
+                .ignoringFields("id", "author.id", "genre.id")
                 .isEqualTo(bookExpected);
     }
 
     @DisplayName("удалять книгу из БД")
     @Test
     void shouldDeleteBook() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
-        bookService.deleteBook(BOOK_TITLE);
+        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
+        bookService.deleteBook(book.getId());
 
         assertThat(bookService.getCount()).isEqualTo(0);
     }
@@ -78,63 +86,94 @@ public class BookServiceTest {
     @DisplayName("менять в книге автора")
     @Test
     void shouldChangeBookAuthor() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
-        bookService.changeAuthor(BOOK_TITLE, "Джоан Роулинг");
+        BookDto bookDto = new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME));
+        Book book = bookService.createBook(bookDto);
+        bookDto.setId(book.getId());
+        bookDto.setAuthor(new Author(2, "Джоан Роулинг"));
+        bookService.update(bookDto);
+
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE);
 
         Book bookExpected = getBook(BOOK_TITLE, 1, "Джоан Роулинг", BOOK_GENRE_ID, BOOK_GENRE_NAME);
 
         assertThat(bookActual)
-                .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
+                .usingRecursiveComparison()
+                .ignoringFields("id", "author.id", "genre.id")
                 .isEqualTo(bookExpected);
     }
 
     @DisplayName("менять в книге жанр")
     @Test
     void shouldChangeBookGenre() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
-        bookService.changeGenre(BOOK_TITLE, "детектив");
+        BookDto bookDto = new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME));
+        Book book = bookService.createBook(bookDto);
+        bookDto.setId(book.getId());
+        bookDto.setGenre(new Genre(2, "детектив"));
+        bookService.update(bookDto);
+
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE);
 
         Book bookExpected = getBook(BOOK_TITLE, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, 2, "детектив");
 
         assertThat(bookActual)
-                .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
+                .usingRecursiveComparison()
+                .ignoringFields("id", "author.id", "genre.id")
                 .isEqualTo(bookExpected);
     }
 
     @DisplayName("менять в книге название")
     @Test
     void shouldChangeBookTitle() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
-        bookService.changeTitle(BOOK_TITLE, BOOK_TITLE + 2);
+        BookDto bookDto = new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME));
+        Book book = bookService.createBook(bookDto);
+        bookDto.setId(book.getId());
+        bookDto.setTitle(BOOK_TITLE + 2);
+        bookService.update(bookDto);
+
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE + 2);
 
         Book bookExpected = getBook(BOOK_TITLE + 2, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME);
 
         assertThat(bookActual)
-                .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
+                .usingRecursiveComparison()
+                .ignoringFields("id", "author.id", "genre.id")
                 .isEqualTo(bookExpected);
     }
 
     @DisplayName("возвращать ожидаемую книгу по title")
     @Test
     void shouldReturnExpectedBookByTitle() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        BookDto bookDto = new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME));
+        bookService.createBook(bookDto);
+
         Book bookActual = bookService.getBookByTitle(BOOK_TITLE);
 
         Book bookExpected = getBook(BOOK_TITLE, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME);
 
         assertThat(bookActual)
-                .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
+                .usingRecursiveComparison()
+                .ignoringFields("id", "author.id", "genre.id")
                 .isEqualTo(bookExpected);
     }
 
     @DisplayName("возвращать ожидаемый список книг")
     @Test
     void shouldReturnExpectedBookList() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
-        bookService.createBook(BOOK_TITLE + 2, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
+        bookService.createBook(new BookDto(BOOK_TITLE + 2,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
+
         List<Book> bookActualList = bookService.findAll();
 
         List<Book> bookExpectedList = new ArrayList<>();
@@ -142,7 +181,8 @@ public class BookServiceTest {
         bookExpectedList.add(getBook(BOOK_TITLE + 2, BOOK_AUTHOR_ID, BOOK_AUTHOR_NAME, BOOK_GENRE_ID, BOOK_GENRE_NAME));
 
         assertThat(bookActualList)
-                .usingRecursiveComparison().comparingOnlyFields("title", "author", "genre")
+                .usingRecursiveComparison()
+                .ignoringFields("id", "author.id", "genre.id")
                 .isEqualTo(bookExpectedList);
     }
 }

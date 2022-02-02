@@ -8,7 +8,5 @@ public interface GenreService {
 
     Genre getById(long id);
 
-    Genre getByName(String name);
-
     List<Genre> getAll();
 }

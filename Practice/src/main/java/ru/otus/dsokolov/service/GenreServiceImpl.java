@@ -24,11 +24,6 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre getByName(String name) {
-        return genreRepository.getByName(name).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "name", name)));
-    }
-
-    @Override
     public List<Genre> getAll() {
         return genreRepository.findAll();
     }

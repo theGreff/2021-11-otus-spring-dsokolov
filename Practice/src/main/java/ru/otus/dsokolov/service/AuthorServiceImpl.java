@@ -24,11 +24,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author getByName(String name) {
-        return authorRepository.getByFullName(name).orElseThrow(() -> new RuntimeException(MessageFormat.format(ERR_MSG, "name", name)));
-    }
-
-    @Override
     public List<Author> getAll() {
         return authorRepository.findAll();
     }

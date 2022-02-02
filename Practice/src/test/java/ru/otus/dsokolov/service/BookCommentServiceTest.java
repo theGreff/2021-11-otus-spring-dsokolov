@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.dsokolov.base.Utils;
+import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.BookComment;
+import ru.otus.dsokolov.domain.Genre;
+import ru.otus.dsokolov.dto.BookDto;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,7 +47,9 @@ public class BookCommentServiceTest {
     @DisplayName("возвращать ожидаемое кол-во коментариев к книге")
     @Test
     void shouldReturnExpectedBookCoomentCount() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
 
         assertThat(bookCommentService.getBookCommentsCount()).isEqualTo(1);
@@ -53,7 +58,9 @@ public class BookCommentServiceTest {
     @DisplayName("возвращать ожидаемый список коментариев")
     @Test
     void shouldReturnExpectedBookCommentList() {
-        Book book = bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         Date dateIns = new Date();
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns);
@@ -72,7 +79,9 @@ public class BookCommentServiceTest {
     @DisplayName("возвращать ожидаемый список коментариев за дату")
     @Test
     void shouldReturnExpectedBookCommentListByDate() {
-        Book book = bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         Date dateIns = Utils.dateStrFormat("12.12.2021");
         Date dateIns2 = Utils.dateStrFormat("13.12.2021");
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
@@ -93,7 +102,9 @@ public class BookCommentServiceTest {
     @DisplayName("возвращать ожидаемый список коментариев по книге")
     @Test
     void shouldReturnExpectedBookCommentListByBook() {
-        Book book = bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         Date dateIns = new Date();
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns);
@@ -114,7 +125,9 @@ public class BookCommentServiceTest {
     @DisplayName("добавлять коментарий к книге")
     @Test
     void shouldCreateBookComment() {
-        Book book = bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         Date dateIns = new Date();
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
 
@@ -133,7 +146,9 @@ public class BookCommentServiceTest {
     @DisplayName("удалять коментарий к книге по id")
     @Test
     void shouldDeleteBookCommentById() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         BookComment bc = bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
@@ -146,7 +161,9 @@ public class BookCommentServiceTest {
     @DisplayName("удалять все коментарии к книге")
     @Test
     void shouldDeleteAllBookCommentsByTitle() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, new Date());
         bookCommentService.delBookCommentsByBookTitle(BOOK_TITLE);
@@ -157,7 +174,9 @@ public class BookCommentServiceTest {
     @DisplayName("удалять все коментарии по дате")
     @Test
     void shouldDeleteAllBookCommentsByDate() {
-        bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         Date dateIns = Utils.dateStrFormat("12.12.2021");
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
         bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns);
@@ -169,7 +188,9 @@ public class BookCommentServiceTest {
     @DisplayName("менять коментарий по id")
     @Test
     void shouldChangeBookCommentById() {
-        Book book = bookService.createBook(BOOK_TITLE, BOOK_AUTHOR_NAME, BOOK_GENRE_NAME);
+        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
+                new Author(1, BOOK_AUTHOR_NAME),
+                new Genre(1, BOOK_GENRE_NAME)));
         Date dateIns = new Date();
         BookComment bcActual = bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
         bookCommentService.changeCommentById(bcActual.getId(), BOOK_COMMENT2);

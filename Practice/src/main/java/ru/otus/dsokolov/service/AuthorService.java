@@ -8,7 +8,5 @@ public interface AuthorService {
 
     Author getById(long id);
 
-    Author getByName(String name);
-
     List<Author> getAll();
 }

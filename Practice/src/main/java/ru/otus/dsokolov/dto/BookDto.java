@@ -13,6 +13,15 @@ public class BookDto {
 
     private Genre genre;
 
+    public BookDto() {
+    }
+
+    public BookDto(String title, Author author, Genre genre) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+    }
+
     public long getId() {
         return id;
     }
@@ -44,4 +53,6 @@ public class BookDto {
     public void setGenre(Genre genre) {
         this.genre = genre;
     }
+
+
 }
