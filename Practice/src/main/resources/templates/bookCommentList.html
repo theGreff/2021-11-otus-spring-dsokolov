@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Book comments list</title>
+    <style type="text/css">
+       body {
+            padding: 50px;
+        }
+
+        .booksComments {
+            border: 1px solid steelblue;
+            width: 700px;
+            border-collapse: collapse;
+        }
+
+        .booksComments tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+    </style>
+</head>
+<body>
+<h3>Book comments list:</h3>
+
+<h3 th:text="${book.title}">title</h3>
+<h3 th:text="${book.author.fullName}">author</h3>
+
+<a href="bookCommentNew.html" th:href="@{/book-comment-add(bookId=${book.id})}">
+    <button type="button">Add comment</button>
+</a>
+<a href="bookList.html" th:href="@{/book-all}">
+    <button type="button">Book list</button>
+</a>
+<table class="booksComments">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Date</th>
+        <th>Comment</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="bookComment : ${bookComments}">
+        <td th:text="${bookComment.id}"></td>
+        <td th:text="${#dates.format(bookComment.dateInsert, 'dd.MM.yyyy')}"></td>
+        <td th:text="${bookComment.comment}"></td>
+        <td>
+            <a th:href="@{/book-comment-del(id=${bookComment.id})}" href="bookCommentDelete.html">
+                <button type="button">delete</button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
