@@ -16,6 +16,7 @@ import java.util.List;
 
 @Controller
 public class BookController {
+
     private final BookService bookService;
     private final AuthorService authorService;
     private final GenreService genreService;
@@ -31,7 +32,7 @@ public class BookController {
         List<Book> bookList = bookService.findAll();
         model.addAttribute("books", bookList);
 
-        return "booksList";
+        return "bookList";
     }
 
     @GetMapping("/book-edit")
@@ -59,7 +60,7 @@ public class BookController {
         return "redirect:/book-all";
     }
 
-    @GetMapping("/book-new")
+    @GetMapping("/book-add")
     public String newBookPage(Model model) {
         BookDto book = new BookDto();
         model.addAttribute("book", book);
@@ -69,7 +70,7 @@ public class BookController {
         return "bookNew";
     }
 
-    @PostMapping("/book-new")
+    @PostMapping("/book-add")
     public String createBook(@ModelAttribute("book") BookDto bookDto) throws ApplicationException {
         try {
             bookService.createBook(bookDto);

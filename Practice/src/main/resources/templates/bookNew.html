@@ -27,7 +27,7 @@
     </style>
 </head>
 <body>
-<form id="book-edit-form" action="bookEdit.html" th:action="@{/book-new}" th:method="post"
+<form id="book-edit-form" action="bookEdit.html" th:action="@{/book-add}" th:method="post"
       th:object="${book}">
     <h3>Book Info:</h3>
 
@@ -55,7 +55,7 @@
     </div>
     <div class="row">
         <button type="submit">Save</button>
-        <a href="booksList.html" th:href="@{/book-all}">
+        <a href="bookList.html" th:href="@{/book-all}">
             <button type="button">Cancel</button>
         </a>
     </div>

@@ -2,12 +2,11 @@ package ru.otus.dsokolov.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.BookComment;
+import ru.otus.dsokolov.dto.BookCommentDto;
 import ru.otus.dsokolov.repository.BookCommentRepository;
 
 import java.text.MessageFormat;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -40,25 +39,12 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
 
     @Override
-    public List<BookComment> getAllCommentsByDate(Date date) {
-        return bookCommentRepository.getByDateInsert(date);
-    }
-
-    @Override
-    public List<BookComment> getAllCommentsByBookTitle(String bookTitle) {
-        return bookCommentRepository.getByBookTitle(bookTitle);
-    }
-
-    @Override
     @Transactional
-    public BookComment createBookComment(String title, String comment, Date dateInsert) {
-        Book book = bookService.getBookByTitle(title);
-
+    public BookComment createBookComment(BookCommentDto bookCommentDto) {
         BookComment bc = new BookComment();
-        bc.setComment(comment);
-        bc.setBook(book);
-        bc.setDateInsert(dateInsert);
-
+        bc.setComment(bookCommentDto.getComment());
+        bc.setBook(bookService.getById(bookCommentDto.getBookId()));
+        bc.setDateInsert(bookCommentDto.getDateInsert());
         bookCommentRepository.save(bc);
 
         return bc;
@@ -67,34 +53,5 @@ public class BookCommentServiceImpl implements BookCommentService {
     @Transactional
     public void delBookCommentById(long id) {
         bookCommentRepository.delete(getCommentById(id));
-    }
-
-    @Override
-    @Transactional
-    public void delBookCommentsByBookTitle(String title) {
-        List<BookComment> bcList = getAllCommentsByBookTitle(title);
-
-        for (BookComment bc : bcList) {
-            bookCommentRepository.delete(bc);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void delBookCommentsByDate(Date date) {
-        List<BookComment> bcList = getAllCommentsByDate(date);
-
-        for (BookComment bc : bcList) {
-            bookCommentRepository.delete(bc);
-        }
-    }
-
-    @Override
-    @Transactional
-    public void changeCommentById(long id, String commentNew) {
-        BookComment bc = getCommentById(id);
-        bc.setComment(commentNew);
-
-        bookCommentRepository.save(bc);
     }
 }

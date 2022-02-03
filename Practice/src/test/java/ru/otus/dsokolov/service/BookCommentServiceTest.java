@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import ru.otus.dsokolov.base.Utils;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.BookComment;
 import ru.otus.dsokolov.domain.Genre;
+import ru.otus.dsokolov.dto.BookCommentDto;
 import ru.otus.dsokolov.dto.BookDto;
 
 import java.util.ArrayList;
@@ -47,10 +47,11 @@ public class BookCommentServiceTest {
     @DisplayName("возвращать ожидаемое кол-во коментариев к книге")
     @Test
     void shouldReturnExpectedBookCoomentCount() {
-        bookService.createBook(new BookDto(BOOK_TITLE,
+        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
+        bookCommentService.createBookComment(new BookCommentDto(BOOK_COMMENT,
+                new Date(), book));
 
         assertThat(bookCommentService.getBookCommentsCount()).isEqualTo(1);
     }
@@ -62,8 +63,10 @@ public class BookCommentServiceTest {
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
         Date dateIns = new Date();
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns);
+
+        bookCommentService.createBookComment(new BookCommentDto(BOOK_COMMENT, dateIns, book));
+        bookCommentService.createBookComment(new BookCommentDto(BOOK_COMMENT2, dateIns, book));
+
         List<BookComment> actualList = bookCommentService.getAllComments();
 
         List<BookComment> expectedList = new ArrayList<>();
@@ -76,52 +79,6 @@ public class BookCommentServiceTest {
                 .isEqualTo(expectedList);
     }
 
-    @DisplayName("возвращать ожидаемый список коментариев за дату")
-    @Test
-    void shouldReturnExpectedBookCommentListByDate() {
-        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
-                new Author(1, BOOK_AUTHOR_NAME),
-                new Genre(1, BOOK_GENRE_NAME)));
-        Date dateIns = Utils.dateStrFormat("12.12.2021");
-        Date dateIns2 = Utils.dateStrFormat("13.12.2021");
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns2);
-
-        List<BookComment> actualList = bookCommentService.getAllCommentsByDate(dateIns);
-
-        List<BookComment> expectedList = new ArrayList<>();
-        expectedList.add(getBookComment(book, BOOK_COMMENT, dateIns));
-
-        assertThat(actualList)
-                .usingRecursiveComparison()
-                .ignoringCollectionOrder()
-                .comparingOnlyFields("comment", "dateInsert", "book")
-                .isEqualTo(expectedList);
-    }
-
-    @DisplayName("возвращать ожидаемый список коментариев по книге")
-    @Test
-    void shouldReturnExpectedBookCommentListByBook() {
-        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
-                new Author(1, BOOK_AUTHOR_NAME),
-                new Genre(1, BOOK_GENRE_NAME)));
-        Date dateIns = new Date();
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns);
-
-        List<BookComment> actualList = bookCommentService.getAllCommentsByBookTitle(BOOK_TITLE);
-
-        List<BookComment> expectedList = new ArrayList<>();
-        expectedList.add(getBookComment(book, BOOK_COMMENT, dateIns));
-        expectedList.add(getBookComment(book, BOOK_COMMENT2, dateIns));
-
-        assertThat(actualList)
-                .usingRecursiveComparison()
-                .ignoringCollectionOrder()
-                .comparingOnlyFields("comment", "dateInsert", "book")
-                .isEqualTo(expectedList);
-    }
-
     @DisplayName("добавлять коментарий к книге")
     @Test
     void shouldCreateBookComment() {
@@ -129,7 +86,7 @@ public class BookCommentServiceTest {
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
         Date dateIns = new Date();
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
+        bookCommentService.createBookComment(new BookCommentDto(BOOK_COMMENT, dateIns, book));
 
         List<BookComment> actualList = bookCommentService.getAllComments();
 
@@ -146,60 +103,15 @@ public class BookCommentServiceTest {
     @DisplayName("удалять коментарий к книге по id")
     @Test
     void shouldDeleteBookCommentById() {
-        bookService.createBook(new BookDto(BOOK_TITLE,
+        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
-        BookComment bc = bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
+        BookComment bc = bookCommentService.createBookComment(new BookCommentDto(BOOK_COMMENT, new Date(), book));
+        bookCommentService.createBookComment(new BookCommentDto(BOOK_COMMENT, new Date(), book));
+        bookCommentService.createBookComment(new BookCommentDto(BOOK_COMMENT2, new Date(), book));
 
         bookCommentService.delBookCommentById(bc.getId());
 
         assertThat(bookCommentService.getBookCommentsCount()).isEqualTo(2);
-    }
-
-    @DisplayName("удалять все коментарии к книге")
-    @Test
-    void shouldDeleteAllBookCommentsByTitle() {
-        bookService.createBook(new BookDto(BOOK_TITLE,
-                new Author(1, BOOK_AUTHOR_NAME),
-                new Genre(1, BOOK_GENRE_NAME)));
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, new Date());
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, new Date());
-        bookCommentService.delBookCommentsByBookTitle(BOOK_TITLE);
-
-        assertThat(bookCommentService.getBookCommentsCount()).isEqualTo(0);
-    }
-
-    @DisplayName("удалять все коментарии по дате")
-    @Test
-    void shouldDeleteAllBookCommentsByDate() {
-        bookService.createBook(new BookDto(BOOK_TITLE,
-                new Author(1, BOOK_AUTHOR_NAME),
-                new Genre(1, BOOK_GENRE_NAME)));
-        Date dateIns = Utils.dateStrFormat("12.12.2021");
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
-        bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT2, dateIns);
-        bookCommentService.delBookCommentsByDate(dateIns);
-
-        assertThat(bookCommentService.getBookCommentsCount()).isEqualTo(0);
-    }
-
-    @DisplayName("менять коментарий по id")
-    @Test
-    void shouldChangeBookCommentById() {
-        Book book = bookService.createBook(new BookDto(BOOK_TITLE,
-                new Author(1, BOOK_AUTHOR_NAME),
-                new Genre(1, BOOK_GENRE_NAME)));
-        Date dateIns = new Date();
-        BookComment bcActual = bookCommentService.createBookComment(BOOK_TITLE, BOOK_COMMENT, dateIns);
-        bookCommentService.changeCommentById(bcActual.getId(), BOOK_COMMENT2);
-
-        BookComment bcExpected = getBookComment(book, BOOK_COMMENT2, dateIns);
-
-        assertThat(bcActual)
-                .usingRecursiveComparison()
-                .comparingOnlyFields("comment", "dateInsert", "book")
-                .isEqualTo(bcExpected);
     }
 }

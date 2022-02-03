@@ -18,12 +18,11 @@
             padding: 5px;
             border: 1px solid steelblue;
         }
-
     </style>
 </head>
 <body>
 <h3>Book list:</h3>
-<a href="bookNew.html" th:href="@{/book-new}">
+<a href="bookNew.html" th:href="@{/book-add}">
     <button type="button">Create book</button>
 </a>
 <table class="books">
@@ -33,8 +32,7 @@
         <th>Title</th>
         <th>Author</th>
         <th>Genre</th>
-        <th>Edit</th>
-        <th>Delete</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -44,10 +42,15 @@
         <td th:text="${book.author.fullName}"></td>
         <td th:text="${book.genre.name}"></td>
         <td>
-            <a th:href="@{/book-edit(id=${book.id})}" href="bookEdit.html">Edit</a>
-        </td>
-        <td>
-            <a th:href="@{/book-del(id=${book.id})}" href="bookDelete.html">Delete</a>
+            <a th:href="@{/book-comment-all(bookId=${book.id})}" href="bookCommentList.html">
+                <button type="button">comments</button>
+            </a>
+            <a th:href="@{/book-edit(id=${book.id})}" href="bookEdit.html">
+                <button type="button">edit</button>
+            </a>
+            <a th:href="@{/book-del(id=${book.id})}" href="bookDelete.html">
+                <button type="button">delete</button>
+            </a>
         </td>
     </tr>
     </tbody>

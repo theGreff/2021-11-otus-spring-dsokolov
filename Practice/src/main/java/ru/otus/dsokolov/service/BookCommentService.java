@@ -1,11 +1,11 @@
 package ru.otus.dsokolov.service;
 
 import ru.otus.dsokolov.domain.BookComment;
+import ru.otus.dsokolov.dto.BookCommentDto;
 
-import java.util.Date;
 import java.util.List;
 
-interface BookCommentService {
+public interface BookCommentService {
 
     long getBookCommentsCount();
 
@@ -13,17 +13,7 @@ interface BookCommentService {
 
     List<BookComment> getAllComments();
 
-    List<BookComment> getAllCommentsByDate(Date date);
-
-    List<BookComment> getAllCommentsByBookTitle(String bookTitle);
-
-    BookComment createBookComment(String bookTitle, String comment, Date dateInsert);
+    BookComment createBookComment(BookCommentDto bookCommentDto);
 
     void delBookCommentById(long id);
-
-    void delBookCommentsByDate(Date date);
-
-    void delBookCommentsByBookTitle(String title);
-
-    void changeCommentById(long id, String commentNew);
 }
