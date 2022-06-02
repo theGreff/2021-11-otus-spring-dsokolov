@@ -3,7 +3,7 @@ package ru.otus.dsokolov.service;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dsokolov.domain.BookComment;
-import ru.otus.dsokolov.dto.BookCommentDto;
+import ru.otus.dsokolov.rest.dto.BookCommentDto;
 import ru.otus.dsokolov.repository.BookCommentRepository;
 
 import java.text.MessageFormat;

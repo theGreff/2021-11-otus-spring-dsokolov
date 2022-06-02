@@ -9,3 +9,7 @@ insert into AUTHOR (id, fullName) values (3, 'Сергей Лукьяненко'
 insert into AUTHOR (id, fullName) values (4, 'Роберт Шекли');
 insert into AUTHOR (id, fullName) values (5, 'Стивен Кинг');
 insert into AUTHOR (id, fullName) values (6, 'Рей Бредбери');
+
+insert into BOOK (id, TITLE, ID_AUTHOR, ID_GENRE) values (1, 'Первая книга', 5, 4);
+insert into BOOK (id, TITLE, ID_AUTHOR, ID_GENRE) values (2, 'Вторая книга', 1, 3);
+insert into BOOK (id, TITLE, ID_AUTHOR, ID_GENRE) values (3, 'Третья книга', 2, 2);

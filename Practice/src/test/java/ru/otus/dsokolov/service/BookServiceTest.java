@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Import;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
-import ru.otus.dsokolov.dto.BookDto;
+import ru.otus.dsokolov.rest.dto.BookDto;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package ru.otus.dsokolov.dto;
+package ru.otus.dsokolov.rest.dto;
 
 import ru.otus.dsokolov.domain.Book;
 

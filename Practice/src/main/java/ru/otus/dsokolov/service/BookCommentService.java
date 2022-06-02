@@ -1,7 +1,7 @@
 package ru.otus.dsokolov.service;
 
 import ru.otus.dsokolov.domain.BookComment;
-import ru.otus.dsokolov.dto.BookCommentDto;
+import ru.otus.dsokolov.rest.dto.BookCommentDto;
 
 import java.util.List;
 

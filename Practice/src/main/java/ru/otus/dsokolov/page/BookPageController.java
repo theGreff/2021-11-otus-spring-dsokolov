@@ -1,4 +1,4 @@
-package ru.otus.dsokolov.controller;
+package ru.otus.dsokolov.page;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,21 +7,19 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.dsokolov.base.ApplicationException;
 import ru.otus.dsokolov.domain.Book;
-import ru.otus.dsokolov.dto.BookDto;
+import ru.otus.dsokolov.rest.dto.BookDto;
 import ru.otus.dsokolov.service.AuthorService;
 import ru.otus.dsokolov.service.BookService;
 import ru.otus.dsokolov.service.GenreService;
 
-import java.util.List;
-
 @Controller
-public class BookController {
+public class BookPageController {
 
     private final BookService bookService;
     private final AuthorService authorService;
     private final GenreService genreService;
 
-    public BookController(BookService bookService, AuthorService authorService, GenreService genreService) {
+    public BookPageController(BookService bookService, AuthorService authorService, GenreService genreService) {
         this.bookService = bookService;
         this.authorService = authorService;
         this.genreService = genreService;
@@ -29,10 +27,7 @@ public class BookController {
 
     @GetMapping("/book-all")
     public String bookListView(Model model) {
-        List<Book> bookList = bookService.findAll();
-        model.addAttribute("books", bookList);
-
-        return "bookList";
+         return "bookList";
     }
 
     @GetMapping("/book-edit")

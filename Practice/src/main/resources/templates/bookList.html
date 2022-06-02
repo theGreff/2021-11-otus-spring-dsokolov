@@ -4,7 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Book list</title>
     <style type="text/css">
-       body {
+        body {
             padding: 50px;
         }
 
@@ -19,13 +19,16 @@
             border: 1px solid steelblue;
         }
     </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
+
 <body>
-<h3>Book list:</h3>
-<a href="bookNew.html" th:href="@{/book-add}">
-    <button type="button">Create book</button>
-</a>
+<h1>Book list:</h1>
+
 <table class="books">
+    <a href="bookNew.html" th:href="@{/book-add}">
+        <button type="button">Create book</button>
+    </a>
     <thead>
     <tr>
         <th>Id</th>
@@ -36,24 +39,29 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="book : ${books}">
-        <td th:text="${book.id}"></td>
-        <td th:text="${book.title}"></td>
-        <td th:text="${book.author.fullName}"></td>
-        <td th:text="${book.genre.name}"></td>
-        <td>
-            <a th:href="@{/book-comment-all(bookId=${book.id})}" href="bookCommentList.html">
-                <button type="button">comments</button>
-            </a>
-            <a th:href="@{/book-edit(id=${book.id})}" href="bookEdit.html">
-                <button type="button">edit</button>
-            </a>
-            <a th:href="@{/book-del(id=${book.id})}" href="bookDelete.html">
-                <button type="button">delete</button>
-            </a>
-        </td>
-    </tr>
     </tbody>
 </table>
+
+<script>
+    $(function () {
+        $.get('/api/books').done(function (books) {
+            books.forEach(function (book) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${book.id}</td>
+                        <td>${book.title}</td>
+                        <td>${book.author.fullName}</td>
+                        <td>${book.genre.name}</td>
+                        <td>
+                        <a href="/book-comment-all?bookId=${book.id}"> <button type="button">comments</button> </a>
+                        <a href="/book-edit?id=${book.id}"> <button type="button">edit</button> </a>
+                        <a href="/book-del?id=${book.id}"> <button type="button">delete</button> </a>
+                        </td>
+                    </tr>
+                `);
+            });
+        })
+    });
+</script>
 </body>
 </html>

@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationContextException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.dsokolov.domain.Book;
-import ru.otus.dsokolov.dto.BookDto;
+import ru.otus.dsokolov.rest.dto.BookDto;
 import ru.otus.dsokolov.repository.BookRepository;
 
 import java.text.MessageFormat;

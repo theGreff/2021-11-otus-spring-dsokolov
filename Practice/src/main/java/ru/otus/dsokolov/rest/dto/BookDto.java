@@ -1,6 +1,7 @@
-package ru.otus.dsokolov.dto;
+package ru.otus.dsokolov.rest.dto;
 
 import ru.otus.dsokolov.domain.Author;
+import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
 
 public class BookDto {
@@ -20,6 +21,17 @@ public class BookDto {
         this.title = title;
         this.author = author;
         this.genre = genre;
+    }
+
+    public BookDto(Long id, String title, Author author, Genre genre) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+    }
+
+    public static BookDto toDto(Book book) {
+        return new BookDto(book.getId(), book.getTitle(), book.getAuthor(), book.getGenre());
     }
 
     public long getId() {
@@ -53,4 +65,5 @@ public class BookDto {
     public void setGenre(Genre genre) {
         this.genre = genre;
     }
+
 }

@@ -1,4 +1,4 @@
-package ru.otus.dsokolov.controller;
+package ru.otus.dsokolov.page;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.otus.dsokolov.base.ApplicationException;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.BookComment;
-import ru.otus.dsokolov.dto.BookCommentDto;
+import ru.otus.dsokolov.rest.dto.BookCommentDto;
 import ru.otus.dsokolov.service.BookCommentService;
 import ru.otus.dsokolov.service.BookService;
 
@@ -16,12 +16,12 @@ import java.util.Date;
 import java.util.Set;
 
 @Controller
-public class BookCommentController {
+public class BookCommentPageController {
 
     private final BookService bookService;
     private final BookCommentService bookCommentService;
 
-    public BookCommentController(BookService bookService, BookCommentService bookCommentService) {
+    public BookCommentPageController(BookService bookService, BookCommentService bookCommentService) {
         this.bookService = bookService;
         this.bookCommentService = bookCommentService;
     }
