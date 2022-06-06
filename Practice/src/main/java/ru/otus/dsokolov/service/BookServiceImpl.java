@@ -1,11 +1,11 @@
 package ru.otus.dsokolov.service;
 
-import org.springframework.context.ApplicationContextException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.dsokolov.base.ApplicationException;
 import ru.otus.dsokolov.domain.Book;
-import ru.otus.dsokolov.rest.dto.BookDto;
 import ru.otus.dsokolov.repository.BookRepository;
+import ru.otus.dsokolov.rest.dto.BookDto;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -28,7 +28,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void deleteBook(long id) {
+    public void deleteBook(long id) throws ApplicationException {
         bookRepository.delete(getById(id));
     }
 
@@ -38,20 +38,20 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book getBookByTitle(String bookTitle) {
+    public Book getBookByTitle(String bookTitle) throws ApplicationException {
         return bookRepository.getByTitle(bookTitle).orElseThrow(() ->
-                new RuntimeException(MessageFormat.format(ERR_MSG_BOOK_NOT_FOUND, "title", bookTitle)));
+                new ApplicationException(MessageFormat.format(ERR_MSG_BOOK_NOT_FOUND, "title", bookTitle)));
     }
 
     @Override
-    public Book getById(long id) {
+    public Book getById(long id) throws ApplicationException {
         return bookRepository.findById(id).orElseThrow(() ->
-                new RuntimeException(MessageFormat.format(ERR_MSG_BOOK_NOT_FOUND, "id", id)));
+                new ApplicationException(MessageFormat.format(ERR_MSG_BOOK_NOT_FOUND, "id", id)));
     }
 
-    private void checkBookExist(String title) {
+    private void checkBookExist(String title) throws ApplicationException {
         if (bookRepository.existsByTitle(title)) {
-            throw new ApplicationContextException(MessageFormat.format(ERR_MSG_BOOK_EXIST, title));
+            throw new ApplicationException(MessageFormat.format(ERR_MSG_BOOK_EXIST, title));
         }
     }
 
@@ -62,7 +62,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public Book createBook(BookDto bookDto) {
+    public Book createBook(BookDto bookDto) throws ApplicationException {
         checkBookExist(bookDto.getTitle());
 
         Book bookNew = new Book();
@@ -75,7 +75,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
-    public void update(BookDto bookDto) {
+    public Book update(BookDto bookDto) throws ApplicationException {
         Book bookOld = bookRepository.getById(bookDto.getId());
         if (!bookDto.getTitle().equals(bookOld.getTitle())) {
             checkBookExist(bookDto.getTitle());
@@ -85,6 +85,6 @@ public class BookServiceImpl implements BookService {
         bookOld.setAuthor(bookDto.getAuthor());
         bookOld.setGenre(bookDto.getGenre());
 
-        bookRepository.save(bookOld);
+        return bookRepository.save(bookOld);
     }
 }

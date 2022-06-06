@@ -26,6 +26,16 @@ public class Book {
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<BookComment> comments;
 
+    public Book() {
+    }
+
+    public Book(long id, String title, Author author, Genre genre) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+    }
+
     public long getId() {
         return id;
     }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import ru.otus.dsokolov.base.ApplicationException;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.BookComment;
@@ -46,7 +47,7 @@ public class BookCommentServiceTest {
 
     @DisplayName("возвращать ожидаемое кол-во коментариев к книге")
     @Test
-    void shouldReturnExpectedBookCoomentCount() {
+    void shouldReturnExpectedBookCoomentCount() throws ApplicationException {
         Book book = bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
@@ -58,7 +59,7 @@ public class BookCommentServiceTest {
 
     @DisplayName("возвращать ожидаемый список коментариев")
     @Test
-    void shouldReturnExpectedBookCommentList() {
+    void shouldReturnExpectedBookCommentList() throws ApplicationException {
         Book book = bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
@@ -81,7 +82,7 @@ public class BookCommentServiceTest {
 
     @DisplayName("добавлять коментарий к книге")
     @Test
-    void shouldCreateBookComment() {
+    void shouldCreateBookComment() throws ApplicationException {
         Book book = bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
@@ -102,7 +103,7 @@ public class BookCommentServiceTest {
 
     @DisplayName("удалять коментарий к книге по id")
     @Test
-    void shouldDeleteBookCommentById() {
+    void shouldDeleteBookCommentById() throws ApplicationException {
         Book book = bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));

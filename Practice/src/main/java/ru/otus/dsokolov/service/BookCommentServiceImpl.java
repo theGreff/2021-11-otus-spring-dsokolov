@@ -2,9 +2,10 @@ package ru.otus.dsokolov.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.dsokolov.base.ApplicationException;
 import ru.otus.dsokolov.domain.BookComment;
-import ru.otus.dsokolov.rest.dto.BookCommentDto;
 import ru.otus.dsokolov.repository.BookCommentRepository;
+import ru.otus.dsokolov.rest.dto.BookCommentDto;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -40,7 +41,7 @@ public class BookCommentServiceImpl implements BookCommentService {
 
     @Override
     @Transactional
-    public BookComment createBookComment(BookCommentDto bookCommentDto) {
+    public BookComment createBookComment(BookCommentDto bookCommentDto) throws ApplicationException {
         BookComment bc = new BookComment();
         bc.setComment(bookCommentDto.getComment());
         bc.setBook(bookService.getById(bookCommentDto.getBookId()));

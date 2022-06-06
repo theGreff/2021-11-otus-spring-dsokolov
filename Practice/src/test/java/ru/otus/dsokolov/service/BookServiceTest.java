@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import ru.otus.dsokolov.base.ApplicationException;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
@@ -48,7 +49,7 @@ public class BookServiceTest {
 
     @DisplayName("возвращать ожидаемое кол-во книг из БД")
     @Test
-    void shouldReturnExpectedBookCount() {
+    void shouldReturnExpectedBookCount() throws ApplicationException {
         bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
@@ -58,7 +59,7 @@ public class BookServiceTest {
 
     @DisplayName("добавлять книгу в БД")
     @Test
-    void shouldCreateBook() {
+    void shouldCreateBook() throws ApplicationException {
         bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
@@ -74,7 +75,7 @@ public class BookServiceTest {
 
     @DisplayName("удалять книгу из БД")
     @Test
-    void shouldDeleteBook() {
+    void shouldDeleteBook() throws ApplicationException {
         Book book = bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));
@@ -85,7 +86,7 @@ public class BookServiceTest {
 
     @DisplayName("менять в книге автора")
     @Test
-    void shouldChangeBookAuthor() {
+    void shouldChangeBookAuthor() throws ApplicationException {
         BookDto bookDto = new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME));
@@ -106,7 +107,7 @@ public class BookServiceTest {
 
     @DisplayName("менять в книге жанр")
     @Test
-    void shouldChangeBookGenre() {
+    void shouldChangeBookGenre() throws ApplicationException {
         BookDto bookDto = new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME));
@@ -127,7 +128,7 @@ public class BookServiceTest {
 
     @DisplayName("менять в книге название")
     @Test
-    void shouldChangeBookTitle() {
+    void shouldChangeBookTitle() throws ApplicationException {
         BookDto bookDto = new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME));
@@ -148,7 +149,7 @@ public class BookServiceTest {
 
     @DisplayName("возвращать ожидаемую книгу по title")
     @Test
-    void shouldReturnExpectedBookByTitle() {
+    void shouldReturnExpectedBookByTitle() throws ApplicationException {
         BookDto bookDto = new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME));
@@ -166,7 +167,7 @@ public class BookServiceTest {
 
     @DisplayName("возвращать ожидаемый список книг")
     @Test
-    void shouldReturnExpectedBookList() {
+    void shouldReturnExpectedBookList() throws ApplicationException {
         bookService.createBook(new BookDto(BOOK_TITLE,
                 new Author(1, BOOK_AUTHOR_NAME),
                 new Genre(1, BOOK_GENRE_NAME)));

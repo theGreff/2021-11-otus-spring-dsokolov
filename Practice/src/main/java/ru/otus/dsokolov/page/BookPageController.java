@@ -26,8 +26,8 @@ public class BookPageController {
     }
 
     @GetMapping("/book-all")
-    public String bookListView(Model model) {
-         return "bookList";
+    public String bookListView() {
+        return "bookList";
     }
 
     @GetMapping("/book-edit")

@@ -34,6 +34,10 @@ public class BookDto {
         return new BookDto(book.getId(), book.getTitle(), book.getAuthor(), book.getGenre());
     }
 
+    public static Book toDomain(BookDto bookDto) {
+        return new Book(bookDto.getId(), bookDto.getTitle(), bookDto.getAuthor(), bookDto.getGenre());
+    }
+
     public long getId() {
         return id;
     }

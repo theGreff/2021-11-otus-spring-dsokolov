@@ -1,5 +1,6 @@
 package ru.otus.dsokolov.service;
 
+import ru.otus.dsokolov.base.ApplicationException;
 import ru.otus.dsokolov.domain.BookComment;
 import ru.otus.dsokolov.rest.dto.BookCommentDto;
 
@@ -13,7 +14,7 @@ public interface BookCommentService {
 
     List<BookComment> getAllComments();
 
-    BookComment createBookComment(BookCommentDto bookCommentDto);
+    BookComment createBookComment(BookCommentDto bookCommentDto) throws ApplicationException;
 
     void delBookCommentById(long id);
 }
