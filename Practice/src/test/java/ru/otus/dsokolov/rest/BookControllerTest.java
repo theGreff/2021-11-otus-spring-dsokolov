@@ -2,15 +2,19 @@ package ru.otus.dsokolov.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.dsokolov.domain.Author;
 import ru.otus.dsokolov.domain.Book;
 import ru.otus.dsokolov.domain.Genre;
 import ru.otus.dsokolov.repository.BookRepository;
 import ru.otus.dsokolov.rest.dto.BookDto;
+import ru.otus.dsokolov.security.CustomUserDetailsService;
 import ru.otus.dsokolov.service.BookServiceImpl;
 
 import java.util.List;
@@ -25,6 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(BookController.class)
 public class BookControllerTest {
 
@@ -32,6 +37,8 @@ public class BookControllerTest {
     private MockMvc mvc;
     @Autowired
     private ObjectMapper mapper;
+    @MockBean
+    CustomUserDetailsService customUserDetailsService;
     @MockBean
     private BookServiceImpl bookService;
     @MockBean
@@ -43,6 +50,10 @@ public class BookControllerTest {
     private static final long BOOK_GENRE_ID = 4;
     private static final String BOOK_GENRE_NAME = "ужасы";
 
+    @WithMockUser(
+            username = "Admin",
+            authorities = {"ROLE_ADMIN"}
+    )
     @Test
     void shouldReturnCorrectBookList() throws Exception {
         List<Book> bookList = List.of(
@@ -61,6 +72,10 @@ public class BookControllerTest {
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
 
+    @WithMockUser(
+            username = "Admin",
+            authorities = {"ROLE_ADMIN"}
+    )
     @Test
     void shouldReturnCorrectBookById() throws Exception {
         Book book = new Book(1, BOOK_TITLE,
@@ -73,6 +88,10 @@ public class BookControllerTest {
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
 
+    @WithMockUser(
+            username = "Admin",
+            authorities = {"ROLE_ADMIN"}
+    )
     @Test
     void shouldCorrectSaveNewBook() throws Exception {
         Book book = new Book(1, BOOK_TITLE,
@@ -86,6 +105,10 @@ public class BookControllerTest {
                 .andExpect(content().json(expectedResult));
     }
 
+    @WithMockUser(
+            username = "Admin",
+            authorities = {"ROLE_ADMIN"}
+    )
     @Test
     void shouldCorrectUpdateBookTitle() throws Exception {
         Book book = new Book(1, BOOK_TITLE,
@@ -105,6 +128,10 @@ public class BookControllerTest {
                 .andExpect(content().json(expectedResult));
     }
 
+    @WithMockUser(
+            username = "Admin",
+            authorities = {"ROLE_ADMIN"}
+    )
     @Test
     void shouldCorrectDeleteBookById() throws Exception {
         mvc.perform(delete("/api/books/1"))
