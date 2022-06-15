@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Book comment delete</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .errors {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+<form id="book-comment-del-form" action="bookCommentDelete.html" th:action="@{/book-comment-del}" th:method="post"
+      th:object="${bookComment}">
+    <h3>Book comment info:</h3>
+    <div class="row">
+        <input id="book-comment-book-input" name="id" readonly type="hidden" th:value="*{id}" value="test"/>
+    </div>
+    <div class="row">
+        <input id="book-comment-book-input_book" name="bookId" readonly type="hidden" th:value="*{bookId}" value="test"/>
+    </div>
+    <textarea rows="10" cols="100" name="comment" readonly form="book-comment-del-form"
+              th:field="${bookComment.comment}"></textarea>
+    <div class="row">
+        <button type="submit">Delete</button>
+        <a href="bookCommentList.html" th:href="@{/book-comment-all (bookId=${bookComment.bookId})}">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
+</form>
+</body>
+</html>

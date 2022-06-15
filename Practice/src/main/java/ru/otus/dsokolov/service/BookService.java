@@ -1,24 +1,24 @@
 package ru.otus.dsokolov.service;
 
+import ru.otus.dsokolov.base.ApplicationException;
 import ru.otus.dsokolov.domain.Book;
+import ru.otus.dsokolov.rest.dto.BookDto;
 
 import java.util.List;
 
-interface BookService {
+public interface BookService {
 
-    List<Book> getAllBooks();
+    List<Book> findAll();
 
-    Book getBookByTitle(String bookTitle);
+    Book getBookByTitle(String bookTitle) throws ApplicationException;
 
-    int getBooksCount();
+    Book getById(long id) throws ApplicationException;
 
-    void createBook(String title, String authorName, String genreName);
+    long getCount();
 
-    void deleteBook(String title);
+    void deleteBook(long id) throws ApplicationException;
 
-    void changeTitle(String title, String titleNew);
+    Book createBook(BookDto bookDto) throws ApplicationException;
 
-    void changeAuthor(String bookTitle, String authorFullNameNew);
-
-    void changeGenre(String bookTitle, String genreNameNew);
+    Book update(BookDto bookDto) throws ApplicationException;
 }

@@ -1,14 +1,17 @@
 package ru.otus.dsokolov.domain;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "GENRE")
 public class Genre {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
 
-    public Genre(long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    @Column(name = "NAME", nullable = false, unique = true)
+    private String name;
 
     public long getId() {
         return id;
@@ -24,5 +27,13 @@ public class Genre {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Genre(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Genre() {
     }
 }

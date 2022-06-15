@@ -1,14 +1,17 @@
 package ru.otus.dsokolov.domain;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "AUTHOR")
 public class Author {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String fullName;
 
-    public Author(long id, String fullName) {
-        this.id = id;
-        this.fullName = fullName;
-    }
+    @Column(name = "FULLNAME", nullable = false, unique = true)
+    private String fullName;
 
     public long getId() {
         return id;
@@ -24,5 +27,13 @@ public class Author {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public Author(long id, String fullName) {
+        this.id = id;
+        this.fullName = fullName;
+    }
+
+    public Author() {
     }
 }

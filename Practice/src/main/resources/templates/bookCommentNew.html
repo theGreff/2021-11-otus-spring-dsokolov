@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Book comment create</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .errors {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<form id="book-comment-add-form" action="bookCommentNew.html" th:action="@{/book-comment-add}" th:method="post"
+      th:object="${bookComment}">
+    <h3>Book Info:</h3>
+    <div class="row">
+        <input id="book-comment-book-input" name="bookId" type="hidden" th:value="*{bookId}" value="test"/>
+    </div>
+    <textarea rows="10" cols="100" name="comment" form="book-comment-add-form" th:value="*{comment}"></textarea>
+    <div class="row">
+        <button type="submit">Save</button>
+        <a href="bookCommentList.html" th:href="@{/book-comment-all (bookId=${bookComment.bookId})}">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
+</form>
+</body>
+</html>
