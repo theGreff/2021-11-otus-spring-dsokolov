@@ -14,7 +14,7 @@
     <artifactId>Practice</artifactId>
     <version>1.0</version>
     <name>Practice</name>
-    <description>Practice11</description>
+    <description>Practice12</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
